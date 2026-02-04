@@ -90,7 +90,7 @@ export default function Header() {
           {/* Schedule Meeting Button */}
           <Button
             size="sm"
-            className="header-button-bg header-button-text hover:opacity-90"
+            className="header-button-bg header-button-text hover:opacity-90 hover:text-white"
           >
             Schedule Meeting
           </Button>
