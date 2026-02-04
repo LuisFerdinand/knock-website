@@ -38,15 +38,25 @@ export default function Header() {
       }`}
     >
       <nav className="container-custom flex items-center justify-between py-4">
-        {/* 1. LEFT SIDE: Logo */}
+        {/* 1. LEFT SIDE: Logo - Different logos for light and dark themes */}
         <Link href="/" className="flex items-center z-50 relative">
-          <Image
-            src="/logo.gif" 
-            alt="Knock Logo" 
-            width={800} 
-            height={40}
-            className="h-auto w-32" 
-          />
+          {theme === "dark" ? (
+            <Image
+              src="/logo.gif" 
+              alt="Knock Logo" 
+              width={800} 
+              height={40}
+              className="h-auto w-32" 
+            />
+          ) : (
+            <Image
+              src="/logo-black.gif" 
+              alt="Knock Logo" 
+              width={800} 
+              height={40}
+              className="h-auto w-32" 
+            />
+          )}
         </Link>
 
         {/* 2. CENTER SIDE: Navigation Links */}
