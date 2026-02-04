@@ -12,7 +12,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Knock - Housing Design & Architecture",
+  title: "Home & Space Improvement Studio",
   description: "Premium interior design and architecture services for your dream home",
 };
 
