@@ -462,7 +462,7 @@ export default function PortfolioPage() {
               {/* Category - Middle Left */}
               <motion.div 
                 key={`category-${selectedProject.id}`}
-                className="absolute top-1/2 left-8 md:left-16 origin-left"
+                className="absolute top-1/2 left-8 md:left-12 origin-left"
                 variants={categoryVariants}
                 initial="initial"
                 animate="animate"
