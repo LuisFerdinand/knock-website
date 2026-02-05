@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "./Header";
 import Footer from "./Footer";
+import UnderConstruction from "./UnderConstruction";
 
 export default function LayoutWrapper({
   children,
@@ -14,6 +15,7 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const isUnderConstructionPage = pathname === "/under-construction";
   
   // Calculate initial state without side effects
   const getInitialHeaderState = () => {
@@ -53,6 +55,11 @@ export default function LayoutWrapper({
       setShowHeader(true);
     }
   }, [isHomePage, showHeader]);
+
+  // If it's the under construction page, show only that
+  if (isUnderConstructionPage) {
+    return <UnderConstruction />;
+  }
 
   return (
     <>
