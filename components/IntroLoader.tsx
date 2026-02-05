@@ -4,29 +4,29 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useTheme } from "@/components/providers/ThemeProvider"; // Import useTheme hook
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 interface IntroLoaderProps {
   onComplete: () => void;
 }
 
 export default function IntroLoader({ onComplete }: IntroLoaderProps) {
-  const [isPlaying, setIsPlaying] = useState(false); // Start as false
+  const [isPlaying, setIsPlaying] = useState(false);
   const [gifLoaded, setGifLoaded] = useState(false);
   const [showClickPrompt, setShowClickPrompt] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
-  const [mounted, setMounted] = useState(false); // Add mounted state
+  const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const { theme } = useTheme(); // Get current theme
+  const scrollListenerRef = useRef<(() => void) | null>(null);
+  const { theme } = useTheme();
 
   // Set mounted state to avoid hydration mismatch
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
-  // Initialize audio (but don't play yet)
+  // Initialize audio and scroll listener
   useEffect(() => {
     console.log("IntroLoader mounted - waiting for user click");
     
@@ -35,11 +35,28 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
     audio.loop = false;
     audioRef.current = audio;
 
+    // Add scroll listener to skip intro on scroll
+    const handleScroll = () => {
+      console.log("Scroll detected, skipping intro");
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
+        scrollListenerRef.current = null;
+      }
+      // eslint-disable-next-line react-hooks/immutability
+      handleSkipIntro();
+    };
+    
+    scrollListenerRef.current = handleScroll;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     // Cleanup
     return () => {
       console.log("IntroLoader unmounting");
       if (timerRef.current) {
         clearTimeout(timerRef.current);
+      }
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
       }
       if (audioRef.current) {
         audioRef.current.pause();
@@ -48,6 +65,17 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
       }
     };
   }, []);
+
+  const handleSkipIntro = () => {
+    console.log("Skipping intro animation");
+    setIsPlaying(false);
+    setShowClickPrompt(false);
+    
+    // Call onComplete immediately with a short delay for animation
+    setTimeout(() => {
+      onComplete();
+    }, 300);
+  };
 
   const startIntro = async () => {
     // Prevent multiple starts
@@ -92,7 +120,6 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
   };
 
   // Determine which logo to use based on theme
-  // Only use this after component is mounted to avoid hydration mismatch
   const logoSrc = mounted && theme === "light" ? "/logo-black.gif" : "/logo.gif";
 
   return (
@@ -105,8 +132,9 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
             onClick={startIntro}
             initial={{ opacity: 1 }}
             exit={{ 
+              y: "-100%",
               opacity: 0,
-              transition: { duration: 0.5 }
+              transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] }
             }}
           >
             {/* Logo preview (static) */}
@@ -117,7 +145,7 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
               transition={{ duration: 0.6 }}
             >
               <Image
-                src={logoSrc} // Use theme-based logo
+                src={logoSrc}
                 alt="Logo"
                 fill
                 className="object-contain"
@@ -149,6 +177,9 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
               <p className="text-foreground/50 text-sm tracking-wider uppercase">
                 Tap to knock
               </p>
+              <p className="text-foreground/30 text-xs mt-2">
+                Or scroll to skip
+              </p>
             </motion.div>
 
             {/* Ripple effect indicator */}
@@ -177,8 +208,9 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
             animate={{ y: 0 }}
             exit={{ 
               y: "-100%", // Slide entire page up and out
+              opacity: 0,
               transition: { 
-                duration: 0.8,
+                duration: 0.5,
                 ease: [0.76, 0, 0.24, 1] // Smooth ease-in-out
               }
             }}
@@ -198,14 +230,15 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
               exit={{ 
                 scale: 0.9, 
                 opacity: 0,
+                y: -50,
                 transition: { 
-                  duration: 0.6,
+                  duration: 0.5,
                   ease: [0.76, 0, 0.24, 1]
                 }
               }}
             >
               <Image
-                src={logoSrc} // Use theme-based logo
+                src={logoSrc}
                 alt="Loading animation"
                 fill
                 className="object-contain"
@@ -230,12 +263,15 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
               }}
               exit={{ 
                 opacity: 0, 
-                y: -10,
+                y: -20,
                 transition: { duration: 0.5 }
               }}
             >
               <p className="text-foreground/70 text-sm md:text-base tracking-[0.3em] uppercase font-light">
                 {gifLoaded ? "Knock Knock..." : "Loading..."}
+              </p>
+              <p className="text-foreground/30 text-xs mt-2">
+                Scroll to skip
               </p>
             </motion.div>
 
@@ -247,6 +283,7 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
               transition={{ delay: 0.5 }}
               exit={{ 
                 opacity: 0,
+                y: -20,
                 transition: { duration: 0.4 }
               }}
             >

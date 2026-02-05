@@ -48,7 +48,7 @@ export default function Hero() {
       */}
       <div className="absolute top-0 left-0 w-full h-1/2 z-20 flex flex-col items-start justify-start pt-20 pointer-events-none">
         <div className="container-custom w-full pointer-events-auto">
-          <h1 className="text-foreground mb-6 tracking-loose text-left">
+          <h1 className="text-foreground mb-0 tracking-loose text-left">
             Home & Space<br />
            Improvement <br />Studio
           </h1>
