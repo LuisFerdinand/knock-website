@@ -21,7 +21,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - under-construction (the under construction page itself)
+     * - under/ (the directory containing the image)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|under-construction).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|under-construction|under/).*)',
   ],
 };
