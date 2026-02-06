@@ -61,7 +61,6 @@ export default function LayoutWrapper({
     <>
       {/* Animated Header */}
       <AnimatePresence>
-        {showHeader && (
           <motion.div
             key="header"
             initial={{ y: -100, opacity: 0 }}
@@ -74,7 +73,6 @@ export default function LayoutWrapper({
           >
             <Header />
           </motion.div>
-        )}
       </AnimatePresence>
 
       <main>{children}</main>
