@@ -68,6 +68,7 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
       e.preventDefault();
       e.stopPropagation();
       console.log("Scroll detected, skipping intro");
+      // eslint-disable-next-line react-hooks/immutability
       handleSkipIntro();
     };
     

@@ -1,4 +1,4 @@
-// app/page.tsx
+// app/page.tsx (update this file)
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,31 +8,34 @@ import AboutSection from "@/components/home/AboutSection";
 import PortfolioSection from "@/components/home/PortfolioSection";
 import CTASection from "@/components/home/CTASection";
 import IntroLoader from "@/components/IntroLoader";
+import { useIntro } from "@/context/IntroContext";
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(true);
+  const { isIntroActive, setIntroComplete } = useIntro();
   const [isClient, setIsClient] = useState(false);
   
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
-  }, []);
+    
+    // Check if intro has already been shown in this session
+    const introShown = sessionStorage.getItem("introShown");
+    if (introShown === "true") {
+      setIntroComplete();
+    }
+  }, [setIntroComplete]);
 
   const handleIntroComplete = () => {
     console.log("Intro complete, transitioning to main content");
-    setShowIntro(false);
-    // Mark intro as shown in sessionStorage
-    sessionStorage.setItem("introShown", "true");
+    setIntroComplete();
   };
 
-  // Render content in the background while intro plays
-  // This ensures everything is loaded and ready
   return (
     <>
       {/* Main content - always rendered but hidden during intro */}
       <div style={{ 
-        visibility: (isClient && showIntro) ? 'hidden' : 'visible',
-        opacity: (isClient && showIntro) ? 0 : 1,
+        visibility: (isClient && isIntroActive) ? 'hidden' : 'visible',
+        opacity: (isClient && isIntroActive) ? 0 : 1,
         transition: 'opacity 0.3s ease-in-out'
       }}>
         <Hero />
@@ -43,7 +46,7 @@ export default function Home() {
       </div>
 
       {/* Intro loader overlay - shown on top when active */}
-      {isClient && showIntro && (
+      {isClient && isIntroActive && (
         <IntroLoader onComplete={handleIntroComplete} />
       )}
     </>

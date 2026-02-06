@@ -4,6 +4,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
+import { IntroProvider } from "@/context/IntroContext";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({
     <html lang="en" className={spaceGrotesk.variable} suppressHydrationWarning>
       <body className={`${spaceGrotesk.className} antialiased`}>
         <ThemeProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <IntroProvider>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </IntroProvider>
         </ThemeProvider>
       </body>
     </html>
