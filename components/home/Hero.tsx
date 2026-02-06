@@ -46,7 +46,7 @@ export default function Hero() {
         'items-start justify-start': Aligns content to the top left.
         'text-left': Aligns text to the left.
       */}
-      <div className="absolute top-0 left-0 w-full h-1/2 z-20 flex flex-col items-start justify-start pt-20 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-1/2 z-20 flex flex-col items-start justify-center pt-20 pointer-events-none">
         <div className="container-custom w-full pointer-events-auto">
           <h1 className="text-foreground mb-0 tracking-loose text-left">
             Home & Space<br />
