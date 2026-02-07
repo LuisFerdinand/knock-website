@@ -15,7 +15,7 @@ export default function Footer() {
           <Link href="/" className="flex items-center">
             {theme === "dark" ? (
               <Image
-                src="/logo.gif" 
+                src="/footer/Logo-KNOCK-(gold).png" 
                 alt="Knock Logo" 
                 width={800} 
                 height={40}
@@ -23,7 +23,7 @@ export default function Footer() {
               />
             ) : (
               <Image
-                src="/logo-black.gif" 
+                src="/footer/Logo-KNOCK-(green).png" 
                 alt="Knock Logo" 
                 width={800} 
                 height={40}

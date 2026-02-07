@@ -1,116 +1,199 @@
+/* eslint-disable react-hooks/immutability */
 // app/portfolio/page.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { useState, useRef, useEffect, TouchEvent, MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const projects = [
+// Define types for our components
+interface BeforeAfterProps {
+  beforeSrc: string;
+  afterSrc: string;
+  className?: string;
+}
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  location: string;
+  year: string;
+  area: string;
+  completion: string;
+  description: string;
+  beforeImage: string;
+  afterImage: string;
+  galleryImages: string[];
+  tags: string[];
+}
+
+// Before/After comparison component
+const BeforeAfterComparison = ({ beforeSrc, afterSrc, className = "" }: BeforeAfterProps) => {
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = () => setIsDragging(true);
+  const handleMouseUp = () => setIsDragging(false);
+  
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    
+    setSliderPosition(Math.min(100, Math.max(0, percentage)));
+  };
+
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const rect = container.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    
+    setSliderPosition(Math.min(100, Math.max(0, percentage)));
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => setIsDragging(false);
+    
+    if (isDragging) {
+      window.addEventListener('mouseup', handleGlobalMouseUp);
+      window.addEventListener('touchend', handleGlobalMouseUp);
+    }
+    
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+      window.removeEventListener('touchend', handleGlobalMouseUp);
+    };
+  }, [isDragging]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className={`relative overflow-hidden ${className}`}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleMouseUp}
+    >
+      {/* After image (full background) */}
+      <div className="absolute inset-0">
+        <Image
+          src={afterSrc}
+          alt="After"
+          fill
+          className="object-cover"
+        />
+      </div>
+      
+      {/* Before image (clipped) */}
+      <div 
+        className="absolute inset-0 overflow-hidden"
+        style={{ width: `${sliderPosition}%` }}
+      >
+        <Image
+          src={beforeSrc}
+          alt="Before"
+          fill
+          className="object-cover"
+        />
+      </div>
+      
+      {/* Slider line */}
+      <div 
+        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize"
+        style={{ left: `${sliderPosition}%` }}
+      >
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M10 4L16 10L10 16" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      
+      {/* Labels */}
+      <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 text-sm rounded-md">
+        Before
+      </div>
+      <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 text-sm rounded-md">
+        After
+      </div>
+    </div>
+  );
+};
+
+const projects: Project[] = [
   {
     id: 1,
-    title: "Modern Villa Residence",
-    category: "Architecture",
+    title: "Modern Villa Renovation",
+    category: "Complete Renovation",
     location: "Beverly Hills, CA",
     year: "2023",
     area: "450m² / 48T",
     completion: "2023",
-    description: "A contemporary villa featuring open-plan living spaces and seamless indoor-outdoor integration.",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    description: "Complete transformation of a traditional villa into a modern luxury residence with open-plan living spaces and seamless indoor-outdoor integration.",
+    beforeImage: "/portfolio/1/before.jpg",
+    afterImage: "/portfolio/1/after.jpeg",
+    galleryImages: [
+      "/portfolio/1/gallery1.jpeg",
+      "/portfolio/1/gallery2.jpeg",
+      "/portfolio/1/gallery3.jpeg",
+      "/portfolio/1/gallery4.jpeg",
+    ],
     tags: ["Modern", "Luxury", "Sustainable"],
   },
   {
     id: 2,
-    title: "Urban Luxury Apartment",
+    title: "Urban Apartment Transformation",
     category: "Interior Design",
     location: "Manhattan, NY",
     year: "2023",
     area: "280m² / 30T",
     completion: "2023",
-    description: "High-end apartment interior showcasing minimalist design with premium finishes.",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80",
+    description: "Complete redesign of a high-end apartment interior showcasing minimalist design with premium materials and smart home integration.",
+    beforeImage: "/portfolio/2/before.jpg",
+    afterImage: "/portfolio/2/after.jpg",
+    galleryImages: [
+      "/portfolio/2/gallery1.jpg",
+      "/portfolio/2/gallery2.jpg",
+    ],
     tags: ["Contemporary", "Luxury", "Urban"],
-  },
-  {
-    id: 3,
-    title: "Minimalist Family Home",
-    category: "Complete Projects",
-    location: "Portland, OR",
-    year: "2022",
-    area: "380m² / 41T",
-    completion: "2022",
-    description: "A serene family home emphasizing clean lines and functional spaces.",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80",
-    tags: ["Minimalist", "Family", "Eco-Friendly"],
-  },
-  {
-    id: 4,
-    title: "Industrial Loft Conversion",
-    category: "Renovation",
-    location: "Chicago, IL",
-    year: "2023",
-    area: "320m² / 34T",
-    completion: "2023",
-    description: "Transformation of a warehouse into a sophisticated living space with industrial charm.",
-    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1920&q=80",
-    tags: ["Industrial", "Loft", "Urban"],
-  },
-  {
-    id: 5,
-    title: "Coastal Beach House",
-    category: "Architecture",
-    location: "Malibu, CA",
-    year: "2022",
-    area: "520m² / 56T",
-    completion: "2022",
-    description: "Beachfront property designed to maximize ocean views and natural light.",
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80",
-    tags: ["Coastal", "Modern", "Luxury"],
-  },
-  {
-    id: 6,
-    title: "Scandinavian Apartment",
-    category: "Interior Design",
-    location: "Seattle, WA",
-    year: "2023",
-    area: "180m² / 19T",
-    completion: "2023",
-    description: "Light-filled apartment featuring Nordic-inspired design and natural materials.",
-    image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&q=80",
-    tags: ["Scandinavian", "Cozy", "Natural"],
-  },
-  {
-    id: 7,
-    title: "Mid-Century Modern Renovation",
-    category: "Renovation",
-    location: "Palm Springs, CA",
-    year: "2022",
-    area: "290m² / 31T",
-    completion: "2022",
-    description: "Restoration and modernization of a classic mid-century home.",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1920&q=80",
-    tags: ["Mid-Century", "Vintage", "Modern"],
-  },
-  {
-    id: 8,
-    title: "Contemporary Townhouse",
-    category: "Complete Projects",
-    location: "Boston, MA",
-    year: "2023",
-    area: "340m² / 37T",
-    completion: "2023",
-    description: "Multi-level townhouse with smart home integration and contemporary design.",
-    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80",
-    tags: ["Contemporary", "Smart Home", "Urban"],
-  },
+  }
 ];
 
 export default function PortfolioPage() {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const selectedProject = projects[selectedProjectIndex];
+  
+  // Get all images for the current project - reordered to have After first, then Before & After
+  const allProjectImages = [
+    { type: 'after' as const, label: 'After' },
+    { type: 'before-after' as const, label: 'Before & After' },
+    ...selectedProject.galleryImages.map((_, index) => ({ 
+      type: 'gallery' as const, 
+      label: `Gallery ${index + 1}` 
+    }))
+  ];
+  
+  const currentImageType = allProjectImages[selectedImageIndex];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -127,7 +210,12 @@ export default function PortfolioPage() {
         const projectProgress = (progress * projects.length) % 1;
         
         setScrollProgress(projectProgress);
-        setSelectedProjectIndex(projectIndex);
+        
+        // Only update project index if it actually changed
+        if (projectIndex !== selectedProjectIndex) {
+          setSelectedProjectIndex(projectIndex);
+          setSelectedImageIndex(0); // Reset image index when project changes
+        }
       }
     };
 
@@ -136,10 +224,29 @@ export default function PortfolioPage() {
       container.addEventListener('scroll', handleScroll);
       return () => container.removeEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, [selectedProjectIndex]);
+
+  // Handle keyboard navigation for images within a project
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle arrow keys if not focused on an input
+      if (document.activeElement?.tagName === 'INPUT' || 
+          document.activeElement?.tagName === 'TEXTAREA') return;
+      
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextImage();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevImage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImageIndex, selectedProjectIndex]);
 
   const scrollToProject = (index: number) => {
-    setSelectedProjectIndex(index);
     if (imageContainerRef.current) {
       const scrollAmount = index * (imageContainerRef.current.scrollHeight / projects.length);
       imageContainerRef.current.scrollTo({
@@ -147,6 +254,14 @@ export default function PortfolioPage() {
         behavior: 'smooth'
       });
     }
+  };
+
+  const nextImage = () => {
+    setSelectedImageIndex((prev) => (prev + 1) % allProjectImages.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImageIndex((prev) => (prev - 1 + allProjectImages.length) % allProjectImages.length);
   };
 
   const getAnimationStyle = (delay = 0, direction = 'up') => {
@@ -342,7 +457,7 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-background">
       {/* Main Project Showcase */}
       <section className="relative h-screen w-full overflow-hidden">
-        {/* Scrollable Images Container with AnimatePresence */}
+        {/* Scrollable Images Container - This handles project navigation */}
         <div 
           ref={imageContainerRef}
           className="absolute inset-0 overflow-y-scroll scrollbar-hide"
@@ -355,7 +470,7 @@ export default function PortfolioPage() {
               style={{ scrollSnapAlign: 'start' }}
             >
               <Image
-                src={project.image}
+                src={project.afterImage}
                 alt={project.title}
                 fill
                 className="object-cover"
@@ -364,6 +479,62 @@ export default function PortfolioPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             </div>
           ))}
+        </div>
+
+        {/* Current Image Display Overlay - This handles image navigation within project */}
+        <div className="absolute inset-0 z-5 pointer-events-none">
+          <AnimatePresence mode="wait">
+            {currentImageType.type === 'after' ? (
+              <motion.div 
+                key={`after-${selectedProject.id}`} 
+                className="relative w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={selectedProject.afterImage}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              </motion.div>
+            ) : currentImageType.type === 'before-after' ? (
+              <motion.div 
+                key={`before-after-${selectedProject.id}`} 
+                className="w-full h-full pointer-events-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <BeforeAfterComparison
+                  beforeSrc={selectedProject.beforeImage}
+                  afterSrc={selectedProject.afterImage}
+                  className="w-full h-full"
+                />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key={`gallery-${selectedProject.id}-${selectedImageIndex - 2}`} 
+                className="relative w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={selectedProject.galleryImages[selectedImageIndex - 2]}
+                  alt={`${selectedProject.title} - Gallery ${selectedImageIndex - 1}`}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Animated Text Content Overlay */}
@@ -386,6 +557,14 @@ export default function PortfolioPage() {
                 >
                   {selectedProject.title}
                 </motion.h1>
+                <motion.p 
+                  className="text-lg md:text-xl mt-2 opacity-80 ml-4 md:ml-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.8 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {currentImageType.label}
+                </motion.p>
               </motion.div>
             </AnimatePresence>
 
@@ -393,7 +572,7 @@ export default function PortfolioPage() {
               {/* Area Info - Top Right */}
               <motion.div 
                 key={`area-${selectedProject.id}`}
-                className="absolute top-36 right-8 md:right-20 text-right"
+                className="absolute top-52 md:top-20 right-8 md:right-20 text-right"
                 variants={slideFromRight}
                 initial="initial"
                 animate="animate"
@@ -439,7 +618,7 @@ export default function PortfolioPage() {
               {/* Location - Lower Left */}
               <motion.div 
                 key={`location-${selectedProject.id}`}
-                className="absolute bottom-56 md:bottom-72 left-12 md:left-28"
+                className="absolute bottom-68 md:bottom-72 left-12 md:left-28"
                 variants={slideFromLeft}
                 initial="initial"
                 animate="animate"
@@ -476,100 +655,94 @@ export default function PortfolioPage() {
             </AnimatePresence>
 
             <AnimatePresence mode="wait">
-              {/* See Overview Button - Bottom Right */}
+              {/* View Details Button - Using Button Component with Variants */}
               <motion.div 
-                key={`button-${selectedProject.id}`}
-                className="absolute bottom-40 md:bottom-56 right-8 md:right-20 pointer-events-auto"
+                key={`details-btn-${selectedProject.id}`}
+                className="absolute bottom-52 -right-20 md:bottom-44 transform -translate-x-1/2 pointer-events-auto"
                 variants={buttonVariants}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                style={getAnimationStyle(0.25, 'down')}
               >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <Link href={`/portfolio/${selectedProject.id}`}>
                   <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="border-white/40 text-white hover:bg-white/20 backdrop-blur-sm bg-white/10"
+                    size="lg"
+                    className="bg-primary hover:bg-primary-900 text-white shadow-lg"
                   >
-                    See Overview +
+                    View Full Project
                   </Button>
-                </motion.div>
+                </Link>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Bottom Navigation Bar */}
+        {/* Bottom Navigation Bar - Improved Styling */}
         <div className="absolute bottom-0 left-0 right-0 z-20">
           <motion.div 
-            className="flex h-32 md:h-40 bg-background/90 backdrop-blur-md border-t border-border"
+            className="flex flex-col md:flex-row h-auto md:h-40 bg-background/95 backdrop-blur-md border-t border-border shadow-lg"
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5, ease: [0.6, 0.05, 0.01, 0.9] as [number, number, number, number], delay: 0.3 }}
           >
-            {/* Left Side - Thumbnail Navigation */}
-            <div className="flex-1 flex items-center gap-3 px-6 overflow-x-auto">
+            {/* Left Side - Portfolio Navigation with Image Thumbnails */}
+            <div className="flex items-center gap-3 px-6 py-4 md:py-0 overflow-x-auto border-b md:border-b-0 md:border-r border-border md:w-4/5">
               {projects.map((project, index) => (
-                <motion.button
+                <button
                   key={project.id}
                   onClick={() => scrollToProject(index)}
-                  className={`relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-sm overflow-hidden transition-all duration-300 ${
+                  className={cn(
+                    "relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-sm overflow-hidden transition-all duration-300",
                     selectedProjectIndex === index 
-                      ? 'ring-2 ring-secondary opacity-100' 
+                      ? 'ring-2 ring-primary opacity-100' 
                       : 'opacity-50 hover:opacity-80'
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: selectedProjectIndex === index ? 1 : 0.5, y: 0 }}
-                  transition={{ duration: 0.25, delay: 0.35 + index * 0.03 }}
-                  whileHover={{ 
-                    scale: 1.1,
-                    opacity: 1,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
+                  )}
                 >
                   <Image
-                    src={project.image}
+                    src={project.afterImage}
                     alt={project.title}
                     fill
                     className="object-cover"
                   />
                   {selectedProjectIndex === index && (
                     <motion.div
-                      className="absolute inset-0 border-2 border-secondary"
-                      layoutId="thumbnail-border"
+                      className="absolute inset-0 border-2 border-primary"
+                      layoutId={`project-thumbnail-${project.id}`}
                       transition={{ duration: 0.25, ease: [0.6, 0.05, 0.01, 0.9] as [number, number, number, number] }}
                     />
                   )}
-                </motion.button>
+                </button>
               ))}
             </div>
 
-            {/* Right Side - Back to Works */}
-            <motion.div 
-              className="flex items-center justify-center px-8 border-l border-border"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.4 }}
-            >
-              <Link 
-                href="/" 
-                className="text-sm md:text-base text-foreground hover:text-secondary transition-colors flex items-center gap-2 whitespace-nowrap"
-              >
-                <motion.span 
-                  className="text-xl"
-                  whileHover={{ x: -5 }}
-                  transition={{ duration: 0.2 }}
+            {/* Right Side - Gallery Navigation with Arrows and Counter - Using Button Variants */}
+            <div className="flex items-center justify-center px-8 py-4 md:py-0">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={prevImage}
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                  )}
                 >
-                  ←
-                </motion.span> 
-                Back to Works
-              </Link>
-            </motion.div>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 15l-5-5 5-5" />
+                  </svg>
+                </button>
+                <div className="text-sm text-muted-foreground min-w-[60px] text-center">
+                  {selectedImageIndex + 1} / {allProjectImages.length}
+                </div>
+                <button
+                  onClick={nextImage}
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                  )}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 15l5-5-5-5" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

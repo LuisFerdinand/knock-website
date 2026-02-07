@@ -85,7 +85,7 @@ export default function AboutPage() {
           <div className="w-full lg:w-1/2 relative">
             <div className="aspect-4/3 lg:aspect-square rounded-2xl overflow-hidden shadow-2xl relative">
               <Image
-                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&auto=format&fit=crop"
+                src="/about/Bricks.png"
                 alt="Modern architecture"
                 fill
                 className="object-cover"
@@ -100,8 +100,8 @@ export default function AboutPage() {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="w-6 h-10 border-2 border-[var(--color-primary)] rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-[var(--color-primary)] rounded-full mt-2 animate-pulse"></div>
+          <div className="w-6 h-10 border-2 border-(--color-primary) rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-(--color-primary) rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </section>
@@ -113,19 +113,11 @@ export default function AboutPage() {
             {/* Content Side */}
             <div className="space-y-6">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-                Menciptakan Ruang yang <span className="text-[var(--color-secondary)]">Menginspirasi</span>
+                Menciptakan Ruang yang <span className="text-(--color-secondary)">Menginspirasi</span>
               </h2>
               
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Knock Studio adalah studio desain arsitektur dan interior yang berbasis di Jakarta. 
-                Didirikan pada tahun 2008, kami telah berdedikasi untuk menciptakan ruang yang 
-                tidak hanya fungsional tetapi juga estetis dan berkelanjutan.
-              </p>
-
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Filosofi kami adalah mendengarkan kebutuhan klien, memahami gaya hidup mereka, 
-                dan menerjemahkannya ke dalam desain yang unik dan personal. Setiap proyek adalah 
-                perjalanan kolaboratif antara tim kami dan klien.
+               KNOCK adalah <span className="font-bold"> Home & Space Improvement Studio </span> yang membantu pemilik rumah meningkatkan kualitas ruang hidup—baik dari sisi fungsi, estetika, maupun kenyamanan. Kami percaya bahwa rumah bukan sekedar membangun atau memperbaiki, tetapi tentang meningkatkan cara sebuah ruang digunakan dan dirasakan. Karena itu, setiap proyek KNOCK dimulai dengan pemahaman kebutuhan klien, visualisasi desain yang jelas, dan perencanaan yang terukur.
               </p>
 
               <div className="grid grid-cols-2 gap-8 pt-8">
@@ -196,7 +188,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="min-h-screen flex items-center">
+      {/* <section className="min-h-screen flex items-center">
         <div className="container-custom py-20">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Tim Profesional Kami</h2>
@@ -223,7 +215,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       {/* <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-800)] text-white">
