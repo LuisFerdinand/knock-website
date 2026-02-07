@@ -85,7 +85,7 @@ export default function AboutPage() {
           <div className="w-full lg:w-1/2 relative">
             <div className="aspect-4/3 lg:aspect-square rounded-2xl overflow-hidden shadow-2xl relative">
               <Image
-                src="/about/Bricks.png"
+                src="/about/aset1.png"
                 alt="Modern architecture"
                 fill
                 className="object-cover"
@@ -136,7 +136,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-4/3 rounded-2xl overflow-hidden shadow-2xl relative">
                 <Image
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                  src="/about/Bricks.png"
                   alt="Knock Studio Team"
                   fill
                   className="object-cover"
