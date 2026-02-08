@@ -29,10 +29,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Determine if header should have the scrolled styling
+  const shouldShowScrolledStyle = isScrolled || mobileMenuOpen;
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
+        shouldShowScrolledStyle
           ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
           : "bg-transparent border-b border-transparent"
       }`}
@@ -92,7 +95,11 @@ export default function Header() {
             size="sm"
             className="header-button-bg header-button-text hover:opacity-90 hover:text-white"
           >
-            Schedule Meeting
+            <Link
+              href="/schedule"
+            >
+              Schedule Meeting
+            </Link>
           </Button>
         </div>
 
@@ -146,7 +153,11 @@ export default function Header() {
                 className="w-full header-button-bg header-button-text hover:opacity-90" 
                 size="sm"
               >
-                Schedule Meeting
+                <Link
+                  href="/schedule"
+                >
+                  Schedule Meeting
+                </Link>
               </Button>
             </div>
           </div>

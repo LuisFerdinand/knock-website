@@ -3,203 +3,209 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Home, 
-  Ruler, 
-  Palette, 
-  Layers, 
-  Lightbulb, 
-  Building2,
-  Sofa,
-  Trees,
-  Hammer,
+  Eye,
+  MessageSquare,
+  Calculator,
+  Wrench,
+  MapPin,
   CheckCircle,
   ArrowRight,
   Star,
   Clock,
-  Users
+  FileText,
+  Pencil,
+  Check,
+  Calendar,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 const services = [
   {
-    id: "desain-interior",
-    icon: Palette,
-    title: "Desain Interior Rumah",
-    description: "Transformasi interior rumah Anda dengan desain yang memadukan fungsi dan estetika sempurna.",
-    price: "Mulai dari Rp 5.000.000/m²",
-    duration: "4-6 minggu",
+    id: "home-renovation",
+    icon: Home,
+    title: "Home Renovation",
+    description: "Renovasi rumah skala kecil hingga menengah dengan pengerjaan rapih dan terukur.",
+    duration: "2-4 minggu",
     features: [
-      "Perencanaan tata ruang dan layout",
-      "Konsultasi skema warna",
-      "Pemilihan dan penempatan furnitur",
-      "Desain millwork dan built-in kustom",
+      "Renovasi ruang tamu dan keluarga",
+      "Perbaikan struktur dan finishing",
+      "Upgrade material berkualitas",
+      "Pengawasan langsung tim ahli",
     ],
-    bestFor: "Pemilik rumah yang ingin merombak tampilan interior tanpa mengubah struktur bangunan",
+    bestFor: "Pemilik rumah yang ingin memperbarui tampilan dan fungsi ruangan tanpa perubahan struktur besar",
     image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
   },
   {
-    id: "arsitektur-rumah",
-    icon: Home,
-    title: "Arsitektur Rumah",
-    description: "Layanan arsitektur komprehensif dari konsep awal hingga konstruksi final untuk rumah impian Anda.",
-    price: "Mulai dari Rp 75.000.000",
-    duration: "3-4 bulan",
+    id: "design-visualization",
+    icon: Eye,
+    title: "Design Visualization",
+    description: "Desain denah dan visual 3D ringan untuk membantu melihat dan menyesuaikan kebutuhan sebelum renovasi dimulai.",
+    duration: "1-2 minggu",
     features: [
-      "Desain dan perencanaan rumah tinggal",
-      "Koordinasi teknik struktur",
-      "Perizinan bangunan",
-      "Pemodelan 3D dan visualisasi",
+      "Pembuatan denah layout ruangan",
+      "Visualisasi 3D rendering",
+      "Multiple design options",
+      "Revisi desain unlimited",
     ],
-    bestFor: "Klien yang membangun rumah baru atau melakukan renovasi besar yang mengubah struktur",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
+    bestFor: "Klien yang ingin melihat hasil akhir renovasi secara visual sebelum memulai pekerjaan",
+    image: "https://images.unsplash.com/photo-1503174971373-b1f69850bded?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
   },
   {
-    id: "renovasi-rumah",
-    icon: Hammer,
-    title: "Renovasi Rumah Lengkap",
-    description: "Solusi renovasi rumah menyeluruh dari konsep hingga penyelesaian dengan pengawasan ketat.",
-    price: "Mulai dari Rp 10.000.000/m²",
-    duration: "2-4 bulan",
+    id: "consultation-survey",
+    icon: MessageSquare,
+    title: "Consultation & Survey",
+    description: "Konsultasi kebutuhan renovasi dan survey lokasi untuk menentukan solusi terbaik.",
+    duration: "1-3 hari",
     features: [
-      "Perombakan tata ruang",
-      "Peningkatan fungsionalitas",
-      "Pembaruan sistem elektrik dan plumbing",
-      "Modernisasi dapur dan kamar mandi",
+      "Konsultasi kebutuhan detail",
+      "Survey dan pengukuran lokasi",
+      "Analisis kondisi eksisting",
+      "Rekomendasi solusi terbaik",
     ],
-    bestFor: "Pemilik rumah yang ingin memperbarui rumah yang ada dengan perubahan signifikan",
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
-  },
-];
-
-const additionalServices = [
-  {
-    icon: Lightbulb,
-    title: "Desain Pencahayaan",
-    description: "Solusi pencahayaan strategis untuk meningkatkan suasana dan fungsionalitas ruangan",
-    price: "Mulai dari Rp 2.500.000/ruangan"
+    bestFor: "Siapa saja yang ingin memulai proyek renovasi dengan perencanaan yang matang",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2673&q=80",
   },
   {
-    icon: Sofa,
-    title: "Kurasi Furnitur",
-    description: "Layanan pemilihan dan pengadaan furnitur kustom untuk rumah Anda",
-    price: "Mulai dari Rp 5.000.000"
+    id: "cost-estimation",
+    icon: Calculator,
+    title: "Cost Estimation (RAB)",
+    description: "Estimasi biaya yang jelas dan transparan agar bisa menyesuaikan budget sejak awal.",
+    duration: "3-5 hari",
+    features: [
+      "Rincian biaya material detail",
+      "Estimasi biaya tenaga kerja",
+      "Breakdown per item pekerjaan",
+      "Transparansi harga penuh",
+    ],
+    bestFor: "Pemilik rumah yang ingin mengetahui estimasi biaya renovasi secara detail dan akurat",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
   },
   {
-    icon: Trees,
-    title: "Integrasi Taman",
-    description: "Desain ruang hidup indoor-outdoor yang seamless dengan taman",
-    price: "Mulai dari Rp 15.000.000"
-  },
-  {
-    icon: Ruler,
-    title: "Perencanaan Tata Ruang",
-    description: "Optimasi ruang untuk fungsionalitas dan alur maksimal",
-    price: "Mulai dari Rp 3.000.000/ruangan"
+    id: "project-execution",
+    icon: Wrench,
+    title: "Project Execution",
+    description: "Pengerjaan renovasi oleh tim tukang berpengalaman dengan pengawasan langsung agar hasil sesuai rencana.",
+    duration: "Sesuai skala proyek",
+    features: [
+      "Tim tukang berpengalaman",
+      "Pengawasan langsung harian",
+      "Update progress berkala",
+      "Quality control ketat",
+    ],
+    bestFor: "Klien yang mengutamakan kualitas pengerjaan dan hasil sesuai rencana",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
   },
 ];
 
 const comparisonData = [
   {
-    feature: "Perubahan Struktur Bangunan",
-    interior: "Tidak",
-    architecture: "Ya",
-    renovation: "Ya",
+    feature: "Konsultasi & Survey",
+    renovation: true,
+    visualization: true,
+    consultation: true,
+    estimation: true,
+    execution: false,
   },
   {
-    feature: "Desain Tata Ruang",
-    interior: "Ya",
-    architecture: "Ya",
-    renovation: "Ya",
+    feature: "Desain 3D & Layout",
+    renovation: false,
+    visualization: true,
+    consultation: false,
+    estimation: false,
+    execution: false,
   },
   {
-    feature: "Pemilihan Material",
-    interior: "Ya",
-    architecture: "Ya",
-    renovation: "Ya",
+    feature: "Estimasi Biaya (RAB)",
+    renovation: true,
+    visualization: false,
+    consultation: false,
+    estimation: true,
+    execution: false,
   },
   {
-    feature: "Manajemen Konstruksi",
-    interior: "Tidak",
-    architecture: "Opsional",
-    renovation: "Ya",
+    feature: "Pengerjaan Renovasi",
+    renovation: true,
+    visualization: false,
+    consultation: false,
+    estimation: false,
+    execution: true,
   },
   {
-    feature: "Visualisasi 3D",
-    interior: "Ya",
-    architecture: "Ya",
-    renovation: "Ya",
+    feature: "Pengawasan Proyek",
+    renovation: true,
+    visualization: false,
+    consultation: false,
+    estimation: false,
+    execution: true,
+  },
+];
+
+const serviceArea = [
+  "Jakarta",
+  "Bogor",
+  "Depok",
+  "Tangerang",
+  "Bekasi"
+];
+
+const workSteps = [
+  {
+    number: "01",
+    icon: Calendar,
+    title: "Set A Survey Schedule",
+    subtitle: "Tetapkan Jadwal Survei",
   },
   {
-    feature: "Perizinan Bangunan",
-    interior: "Tidak",
-    architecture: "Ya",
-    renovation: "Ya (jika diperlukan)",
+    number: "02",
+    icon: MapPin,
+    title: "Field Survey",
+    subtitle: "Survei Lapangan",
+  },
+  {
+    number: "03",
+    icon: Pencil,
+    title: "Study Architect's",
+    subtitle: "Mempelajari Gambar Kerja Arsitek",
+  },
+  {
+    number: "04",
+    icon: Calculator,
+    title: "RAB Calculation",
+    subtitle: "Menghitung Rencana Anggaran Bangunan (RAB)",
+  },
+  {
+    number: "05",
+    icon: Wrench,
+    title: "Implementation of Development",
+    subtitle: "Pelaksanaan Pembangunan",
+  },
+  {
+    number: "06",
+    icon: FileText,
+    title: "Implementation Schedule",
+    subtitle: "Membuat Jadwal Pelaksanaan",
+  },
+  {
+    number: "07",
+    icon: Check,
+    title: "Serah Terima Bangunan",
+    subtitle: "Building Handover",
   },
 ];
 
 export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Services Comparison Section */}
-      <section className="py-20 pt-28">
-        <div className="container-custom">
-          <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Bandingkan Layanan Kami</h2>
-            <p className="text-xl text-muted-foreground">
-              Temukan layanan yang paling sesuai dengan kebutuhan rumah Anda
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left p-4 font-semibold text-foreground">Fitur</th>
-                  <th className="text-center p-4 font-semibold text-foreground">Desain Interior</th>
-                  <th className="text-center p-4 font-semibold text-foreground">Arsitektur</th>
-                  <th className="text-center p-4 font-semibold text-foreground">Renovasi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonData.map((row, index) => (
-                  <tr key={index} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <td className="p-4 text-foreground">{row.feature}</td>
-                    <td className="text-center p-4">
-                      {row.interior === "Ya" ? (
-                        <CheckCircle className="h-5 w-5 text-[var(--color-secondary)] mx-auto" />
-                      ) : (
-                        <span className="text-muted-foreground">{row.interior}</span>
-                      )}
-                    </td>
-                    <td className="text-center p-4">
-                      {row.architecture === "Ya" ? (
-                        <CheckCircle className="h-5 w-5 text-[var(--color-secondary)] mx-auto" />
-                      ) : (
-                        <span className="text-muted-foreground">{row.architecture}</span>
-                      )}
-                    </td>
-                    <td className="text-center p-4">
-                      {row.renovation === "Ya" ? (
-                        <CheckCircle className="h-5 w-5 text-[var(--color-secondary)] mx-auto" />
-                      ) : (
-                        <span className="text-muted-foreground">{row.renovation}</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
+      
       {/* Main Services Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 pt-24 bg-background">
         <div className="container-custom">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Layanan Utama Kami</h2>
             <p className="text-xl text-muted-foreground">
-              Solusi desain rumah yang komprehensif dan disesuaikan dengan kebutuhan Anda
+              Solusi renovasi rumah yang komprehensif dan disesuaikan dengan kebutuhan Anda
             </p>
           </div>
 
@@ -210,7 +216,7 @@ export default function ServicesPage() {
               
               return (
                 <div key={service.id} className={`grid lg:grid-cols-2 gap-12 items-center ${isEven ? '' : 'lg:flex-row-reverse'}`}>
-                  <div className="relative">
+                  <div className={`relative ${!isEven ? 'lg:order-2' : ''}`}>
                     <div className="aspect-4/3 rounded-2xl overflow-hidden shadow-xl">
                       <Image
                         src={service.image}
@@ -222,21 +228,16 @@ export default function ServicesPage() {
                     <div className="absolute -bottom-6 -right-6 w-2/3 h-2/3 bg-[var(--color-secondary)]/10 rounded-2xl -z-10 hidden lg:block"></div>
                   </div>
                   
-                  <div className="space-y-6">
+                  <div className={`space-y-6 ${!isEven ? 'lg:order-1' : ''}`}>
                     <div className="flex items-center gap-4">
                       <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[var(--color-secondary)]/10 text-[var(--color-secondary)]">
                         <Icon className="h-8 w-8" />
                       </div>
                       <div>
                         <h3 className="text-3xl font-bold text-foreground">{service.title}</h3>
-                        <div className="flex items-center gap-4 mt-1">
-                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                            <Clock className="h-4 w-4" />
-                            {service.duration}
-                          </div>
-                          <div className="text-sm text-[var(--color-secondary)] font-semibold">
-                            {service.price}
-                          </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                          <Clock className="h-4 w-4" />
+                          {service.duration}
                         </div>
                       </div>
                     </div>
@@ -261,52 +262,210 @@ export default function ServicesPage() {
                         ))}
                       </div>
                     </div>
-                    
-                    <Link href="/schedule">
-                      <Button className="bg-[var(--color-secondary)] text-white hover:bg-[var(--color-secondary-600)] transition-all duration-300">
-                        Konsultasi untuk {service.title}
-                      </Button>
-                    </Link>
+
                   </div>
                 </div>
               );
             })}
           </div>
+
+          {/* Service Area */}
+          <div className="max-w-4xl mx-auto mt-20">
+            <Card className="border-2 border-[var(--color-secondary)]/20 bg-gradient-to-br from-[var(--color-secondary)]/5 to-background">
+              <CardHeader className="text-center pb-4">
+                <div className="flex justify-center mb-4">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-secondary)]/10 text-[var(--color-secondary)]">
+                    <MapPin className="h-8 w-8" />
+                  </div>
+                </div>
+                <CardTitle className="text-3xl text-foreground">Service Area</CardTitle>
+                <CardDescription className="text-muted-foreground">Area layanan kami meliputi wilayah Jabodetabek</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {serviceArea.map((area, index) => (
+                    <div 
+                      key={index}
+                      className="px-6 py-3 bg-[var(--color-secondary)] text-white rounded-full font-semibold text-sm hover:bg-[var(--color-secondary-600)] transition-colors shadow-md hover:shadow-lg"
+                    >
+                      {area}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
-      {/* Additional Services Section */}
-      <section className="py-20">
+      {/* Services Comparison Section */}
+      <section className="py-20 pt-28 bg-muted/30">
         <div className="container-custom">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Layanan Tambahan</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Bandingkan Layanan Kami</h2>
             <p className="text-xl text-muted-foreground">
-              Layanan pelengkap untuk melengkapi proyek rumah Anda
+              Temukan layanan yang paling sesuai dengan kebutuhan renovasi Anda
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {additionalServices.map((service, index) => {
-              const Icon = service.icon;
-              return (
-                <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-[var(--color-secondary)]">
-                  <CardHeader>
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] group-hover:bg-[var(--color-secondary)] group-hover:text-white transition-colors">
-                      <Icon className="h-6 w-6" />
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse bg-background rounded-xl shadow-lg overflow-hidden">
+              <thead>
+                <tr className="bg-[var(--color-secondary)]">
+                  <th className="text-left p-6 font-semibold text-white">Fitur Layanan</th>
+                  <th className="text-center p-6 font-semibold text-white">Home Renovation</th>
+                  <th className="text-center p-6 font-semibold text-white">Design Visualization</th>
+                  <th className="text-center p-6 font-semibold text-white">Consultation</th>
+                  <th className="text-center p-6 font-semibold text-white">Cost Estimation</th>
+                  <th className="text-center p-6 font-semibold text-white">Project Execution</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonData.map((row, index) => (
+                  <tr key={index} className="border-b border-border hover:bg-muted/50 transition-colors">
+                    <td className="p-6 text-foreground font-medium">{row.feature}</td>
+                    <td className="text-center p-6">
+                      {row.renovation ? (
+                        <CheckCircle className="h-6 w-6 text-[var(--color-secondary)] mx-auto" />
+                      ) : (
+                        <X className="h-6 w-6 text-muted-foreground/30 mx-auto" />
+                      )}
+                    </td>
+                    <td className="text-center p-6">
+                      {row.visualization ? (
+                        <CheckCircle className="h-6 w-6 text-[var(--color-secondary)] mx-auto" />
+                      ) : (
+                        <X className="h-6 w-6 text-muted-foreground/30 mx-auto" />
+                      )}
+                    </td>
+                    <td className="text-center p-6">
+                      {row.consultation ? (
+                        <CheckCircle className="h-6 w-6 text-[var(--color-secondary)] mx-auto" />
+                      ) : (
+                        <X className="h-6 w-6 text-muted-foreground/30 mx-auto" />
+                      )}
+                    </td>
+                    <td className="text-center p-6">
+                      {row.estimation ? (
+                        <CheckCircle className="h-6 w-6 text-[var(--color-secondary)] mx-auto" />
+                      ) : (
+                        <X className="h-6 w-6 text-muted-foreground/30 mx-auto" />
+                      )}
+                    </td>
+                    <td className="text-center p-6">
+                      {row.execution ? (
+                        <CheckCircle className="h-6 w-6 text-[var(--color-secondary)] mx-auto" />
+                      ) : (
+                        <X className="h-6 w-6 text-muted-foreground/30 mx-auto" />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Work Steps Section - Improved Design */}
+      <section className="py-20 bg-background">
+        <div className="container-custom">
+          <div className="mx-auto max-w-2xl text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Alur Kerja Kami</h2>
+            <p className="text-xl text-muted-foreground">
+              Proses kerja yang terstruktur dari awal hingga selesai
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            {/* Desktop view with horizontal flow */}
+            <div className="hidden lg:block relative">
+              <div className="grid grid-cols-4 gap-8 max-w-6xl mx-auto">
+                {workSteps.map((step, index) => {
+                  const Icon = step.icon;
+                  
+                  return (
+                    <div key={index} className="flex flex-col items-center relative">
+                      <div className="rounded-xl shadow-md p-6 w-full hover:shadow-lg transition-shadow duration-300">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-12 rounded-full bg-[var(--color-secondary)]/10 flex items-center justify-center flex-shrink-0">
+                            <span className="text-lg font-bold text-[var(--color-secondary)]">{step.number}</span>
+                          </div>
+                          <Icon className="h-8 w-8 text-[var(--color-secondary)] flex-shrink-0" />
+                        </div>
+                        <h3 className="text-base font-semibold text-foreground mb-1">{step.title}</h3>
+                        <p className="text-sm text-muted-foreground">{step.subtitle}</p>
+                      </div>
+                      
+                      {/* Arrow connector for desktop - horizontal for same row */}
+                      {index < workSteps.length - 1 && index % 4 !== 3 && (
+                        <div className="absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                          <ArrowRight className="h-6 w-6 text-gray-300" />
+                        </div>
+                      )}
+                      
+                      {/* Arrow connector for desktop - diagonal to next row */}
+                      {index === 3 && (
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-10">
+                          <ArrowRight className="h-6 w-6 text-gray-300 rotate-90" />
+                        </div>
+                      )}
                     </div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-muted-foreground mb-4">
-                      {service.description}
-                    </CardDescription>
-                    <div className="text-sm font-semibold text-[var(--color-secondary)]">
-                      {service.price}
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Tablet view */}
+            <div className="hidden md:grid md:grid-cols-2 gap-6 lg:hidden">
+              {workSteps.map((step, index) => {
+                const Icon = step.icon;
+                
+                return (
+                  <div key={index} className=" rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-full bg-[var(--color-secondary)]/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-lg font-bold text-[var(--color-secondary)]">{step.number}</span>
+                      </div>
+                      <Icon className="h-8 w-8 text-[var(--color-secondary)] flex-shrink-0" />
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                    <h3 className="text-base font-semibold text-foreground mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.subtitle}</p>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Mobile view */}
+            <div className="md:hidden space-y-4">
+              {workSteps.map((step, index) => {
+                const Icon = step.icon;
+                
+                return (
+                  <div key={index} className=" rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-300">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-[var(--color-secondary)]/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-lg font-bold text-[var(--color-secondary)]">{step.number}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Icon className="size-5 text-[var(--color-secondary)]" />
+                          <h3 className="text-base font-semibold text-foreground">{step.title}</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{step.subtitle}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Arrow connector for mobile */}
+                    {index < workSteps.length - 1 && (
+                      <div className="flex justify-center mt-4">
+                        <ArrowRight className="h-5 w-5 text-gray-300 transform rotate-90" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -322,17 +481,17 @@ export default function ServicesPage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <Card className="p-6">
+            <Card className="p-6 bg-background border-2 hover:border-[var(--color-secondary)] transition-all">
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
                 ))}
               </div>
               <p className="text-muted-foreground mb-4">
-                "Tim Knock Studio berhasil mengubah rumah kami menjadi yang selalu kami impikan. Prosesnya mulus dan hasilnya melampaui ekspektasi kami."
+                &quot;Tim Knock Studio berhasil mengubah rumah kami menjadi yang selalu kami impikan. Prosesnya mulus dan hasilnya melampaui ekspektasi kami.&quot;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[var(--color-primary-200)]"></div>
+                <div className="w-10 h-10 rounded-full bg-[var(--color-secondary)]/20"></div>
                 <div>
                   <h4 className="font-semibold text-foreground">Budi Santoso</h4>
                   <p className="text-sm text-muted-foreground">Renovasi Rumah</p>
@@ -340,38 +499,38 @@ export default function ServicesPage() {
               </div>
             </Card>
 
-            <Card className="p-6">
+            <Card className="p-6 bg-background border-2 hover:border-[var(--color-secondary)] transition-all">
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
                 ))}
               </div>
               <p className="text-muted-foreground mb-4">
-                "Desain interior yang mereka buat untuk apartemen kami sangat fungsional dan estetis. Setiap inci ruang dimanfaatkan dengan maksimal."
+                &quot;Estimasi biaya yang jelas dan transparan sangat membantu kami dalam perencanaan. Tidak ada biaya tersembunyi, semuanya sesuai RAB.&quot;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[var(--color-primary-200)]"></div>
+                <div className="w-10 h-10 rounded-full bg-[var(--color-secondary)]/20"></div>
                 <div>
                   <h4 className="font-semibold text-foreground">Siti Nurhaliza</h4>
-                  <p className="text-sm text-muted-foreground">Desain Interior</p>
+                  <p className="text-sm text-muted-foreground">Renovasi Dapur</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
+            <Card className="p-6 bg-background border-2 hover:border-[var(--color-secondary)] transition-all">
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
                 ))}
               </div>
               <p className="text-muted-foreground mb-4">
-                "Membangun rumah baru dengan Knock Studio adalah pengalaman yang luar biasa. Mereka memahami visi kami dan mewujudkannya dengan sempurna."
+                &quot;Visualisasi 3D sangat membantu kami melihat hasil akhir sebelum renovasi dimulai. Tim sangat responsif terhadap perubahan yang kami inginkan.&quot;
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[var(--color-primary-200)]"></div>
+                <div className="w-10 h-10 rounded-full bg-[var(--color-secondary)]/20"></div>
                 <div>
                   <h4 className="font-semibold text-foreground">Andi Pratama</h4>
-                  <p className="text-sm text-muted-foreground">Arsitektur Rumah</p>
+                  <p className="text-sm text-muted-foreground">Renovasi Kamar Tidur</p>
                 </div>
               </div>
             </Card>
@@ -380,21 +539,21 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/30">
         <div className="container-custom">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Siap Memulai Proyek Rumah Anda?</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">Siap Memulai Renovasi Rumah Anda?</h2>
             <p className="mb-8 text-xl text-muted-foreground">
-              Jadwalkan konsultasi gratis untuk mendiskusikan proyek Anda dan bagaimana kami dapat membantu mewujudkan visi Anda.
+              Jadwalkan konsultasi dan survey gratis untuk mendiskusikan kebutuhan renovasi Anda
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/schedule">
-                <Button size="lg" className="">
+                <Button size="lg" className="bg-[var(--color-secondary)] text-white hover:bg-[var(--color-secondary-600)]">
                   Jadwalkan Konsultasi
                 </Button>
               </Link>
               <Link href="/portfolio">
-                <Button size="lg" variant="outline" className="text-foreground">
+                <Button size="lg" variant="outline" className="text-foreground border-2">
                   Lihat Portfolio Kami
                 </Button>
               </Link>

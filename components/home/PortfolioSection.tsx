@@ -5,24 +5,24 @@ import Image from "next/image";
 
 const projects = [
   {
-    title: "Vila Moderna",
+    title: "Knock (Puri Bintaro)",
     category: "Arsitektur",
-    image: "https://images.unsplash.com/photo-1618221195710-7978d2985c2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    image: "/portfolio/1/after.jpeg",
   },
   {
-    title: "Apartemen Mewah",
+    title: "Golden Park2 (Cisauk)",
     category: "Desain Interior",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    image: "/portfolio/2/after.jpg",
   },
   {
     title: "Rumah Minimalis",
-    category: "Renovasi Lengkap",
-    image: "https://images.unsplash.com/photo-1600566753376-12c8ac7e9e48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    category: "Desain Interior",
+    image: "/portfolio/3/after.jpg",
   },
   {
-    title: "Loft Urban",
-    category: "Perencanaan Ruang",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    title: "Gama (Depok)",
+    category: "Desain Interior",
+    image: "/portfolio/4/after.jpg",
   },
 ];
 

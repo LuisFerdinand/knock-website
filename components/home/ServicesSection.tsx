@@ -1,29 +1,29 @@
 // /components/home/ServicesSection.tsx
 "use client";
 
-import { Home, Ruler, Palette, Layers } from "lucide-react";
+import { Home, Ruler, Layers, Wallet } from "lucide-react";
 import Link from "next/link";
 
 const services = [
   {
-    icon: Palette,
-    title: "Interior Design",
-    description: "Creating beautiful, functional spaces that reflect your personality and lifestyle with expert color palettes and furnishing.",
-  },
-  {
     icon: Home,
-    title: "Architecture",
-    description: "Innovative architectural solutions from concept to completion, ensuring structural integrity and aesthetic excellence.",
+    title: "Home Renovation",
+    description: "Renovasi rumah skala kecil hingga menengah dengan pengerjaan rapih dan terukur.",
   },
   {
     icon: Ruler,
-    title: "Space Planning",
-    description: "Optimizing layouts for maximum functionality and flow, making the most of every square foot in your home.",
+    title: "Design Visualization",
+    description: "Desain denah dan visual 3D ringan untuk membantu. melihat dan menyesuaikan kebutuhan sebelum renovasi dimulai.",
+  },
+  {
+    icon: Wallet,
+    title: "Consultation & Survey",
+    description: "Konsultasi kebutuhan renovasi dan survey lokasi untuk menentukan solusi terbaik.",
   },
   {
     icon: Layers,
-    title: "3D Visualization",
-    description: "Photorealistic 3D renderings that help you visualize your project before construction begins.",
+    title: "Project Execution",
+    description: "Pengerjaan renovasi oleh tim tukang berpengalaman dengan pengawasan langsung agar hasil sesuai rencana.",
   },
 ];
 

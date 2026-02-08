@@ -18,12 +18,40 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
   const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const scrollListenerRef = useRef<(() => void) | null>(null);
   const { theme } = useTheme();
 
   // Set mounted state to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Prevent body scroll when intro is active
+  useEffect(() => {
+    // Store original overflow and position
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    
+    // Get current scroll position
+    const scrollY = window.scrollY;
+    
+    // Lock the body in place
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup: restore original styles and scroll position
+    return () => {
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.width = originalWidth;
+      document.body.style.overflow = originalOverflow;
+      
+      // Restore scroll position (will be 0 since intro loads first)
+      window.scrollTo(0, scrollY);
+    };
   }, []);
 
   // Initialize audio and scroll listener
@@ -35,19 +63,25 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
     audio.loop = false;
     audioRef.current = audio;
 
-    // Add scroll listener to skip intro on scroll
-    const handleScroll = () => {
+    // Add wheel listener to detect scroll attempts
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
       console.log("Scroll detected, skipping intro");
-      if (scrollListenerRef.current) {
-        window.removeEventListener('scroll', scrollListenerRef.current);
-        scrollListenerRef.current = null;
-      }
       // eslint-disable-next-line react-hooks/immutability
       handleSkipIntro();
     };
     
-    scrollListenerRef.current = handleScroll;
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Add touchmove listener for mobile scroll attempts
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Touch scroll detected, skipping intro");
+      handleSkipIntro();
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     // Cleanup
     return () => {
@@ -55,23 +89,33 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
-      if (scrollListenerRef.current) {
-        window.removeEventListener('scroll', scrollListenerRef.current);
-      }
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchmove', handleTouchMove);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
         audioRef.current = null;
       }
     };
-  }, []);
+  }, []); // Empty dependency array is fine here
 
   const handleSkipIntro = () => {
     console.log("Skipping intro animation");
+    
+    // Clean up audio and timer immediately
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    
     setIsPlaying(false);
     setShowClickPrompt(false);
     
-    // Call onComplete immediately with a short delay for animation
+    // Call onComplete with a short delay for smooth transition
     setTimeout(() => {
       onComplete();
     }, 300);
@@ -207,11 +251,11 @@ export default function IntroLoader({ onComplete }: IntroLoaderProps) {
             initial={{ y: 0 }}
             animate={{ y: 0 }}
             exit={{ 
-              y: "-100%", // Slide entire page up and out
+              y: "-100%",
               opacity: 0,
               transition: { 
                 duration: 0.5,
-                ease: [0.76, 0, 0.24, 1] // Smooth ease-in-out
+                ease: [0.76, 0, 0.24, 1]
               }
             }}
           >
