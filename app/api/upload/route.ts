@@ -2,6 +2,7 @@
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
+import { sanitizeFolderName } from '@/lib/utils'; // Import the utility function
 
 // Configuration
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -11,7 +12,10 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const folder = formData.get('folder') as string || 'portfolio';
+    let folder = formData.get('folder') as string || 'portfolio';
+    
+    // Sanitize the folder name to remove special characters
+    folder = sanitizeFolderName(folder);
     
     // Validate file exists
     if (!file) {
