@@ -68,17 +68,17 @@ async function uploadToCloudinary(
 
 /**
  * Sample project data structure using local portfolio images
- * With Jakarta/Indonesia context
+ * With Indonesian context
  */
 const sampleProjects = [
   {
-    title: 'Modern Villa Renovation',
-    category: 'Residential',
-    location: 'Beverly Hills, CA',
-    year: '2023',
-    area: '4,500 sq ft',
-    completion: 'Completed',
-    description: 'A complete transformation of a 1960s villa into a modern luxury residence with sustainable features and smart home integration.',
+    title: "Knock",
+    category: "Renovasi Total",
+    location: "Puri Bintaro",
+    year: "2023",
+    area: "450m² / 48T",
+    completion: "2023",
+    description: "Transformasi total villa tradisional menjadi hunian mewah modern dengan ruang terbuka dan integrasi indoor-outdoor yang seamless.",
     beforeImagePath: path.join(process.cwd(), 'public/portfolio/1/before.jpg'),
     afterImagePath: path.join(process.cwd(), 'public/portfolio/1/after.jpeg'),
     galleryImagePaths: [
@@ -87,121 +87,81 @@ const sampleProjects = [
       path.join(process.cwd(), 'public/portfolio/1/gallery3.jpeg'),
       path.join(process.cwd(), 'public/portfolio/1/gallery4.jpeg'),
     ],
-    tags: ['Modern', 'Luxury', 'Sustainable', 'Smart Home'],
-    client: 'Private Client',
-    scope: 'Full interior renovation, kitchen remodel, bathroom upgrades, outdoor living space',
-    budget: '$800K - $1M',
-    team: 'Lead Designer: Jane Doe, Architect: John Smith, Contractor: ABC Construction',
+    tags: ["Modern", "Mewah", "Berkelanjutan"],
   },
   {
-    title: 'Downtown Loft Conversion',
-    category: 'Commercial',
-    location: 'New York, NY',
-    year: '2024',
-    area: '2,800 sq ft',
-    completion: 'In Progress',
-    description: 'Converting an industrial warehouse into a modern open-plan office space with collaborative zones and natural lighting.',
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "Golden Park 2, Cisauk",
+    year: "2023",
+    area: "280m² / 30T",
+    completion: "2023",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
     beforeImagePath: path.join(process.cwd(), 'public/portfolio/2/before.jpg'),
-    afterImagePath: path.join(process.cwd(), 'public/portfolio/2/after.jpeg'),
+    afterImagePath: path.join(process.cwd(), 'public/portfolio/2/after.jpg'),
     galleryImagePaths: [
-      path.join(process.cwd(), 'public/portfolio/2/gallery1.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/2/gallery2.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/2/gallery3.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/2/gallery4.jpeg'),
+      path.join(process.cwd(), 'public/portfolio/2/gallery1.jpg'),
+      path.join(process.cwd(), 'public/portfolio/2/gallery2.jpg'),
     ],
-    tags: ['Industrial', 'Office', 'Open Plan', 'Contemporary'],
-    client: 'TechStart Inc.',
-    scope: 'Space planning, interior design, lighting design, furniture selection',
-    budget: '$500K - $700K',
-    team: 'Lead Designer: Sarah Johnson, Project Manager: Mike Brown',
+    tags: ["Minimalis", "Tropis", "Modern"],
   },
   {
-    title: 'Coastal Beach House',
-    category: 'Residential',
-    location: 'Malibu, CA',
-    year: '2023',
-    area: '3,200 sq ft',
-    completion: 'Completed',
-    description: 'A stunning beachfront property designed to maximize ocean views and create seamless indoor-outdoor living.',
-    beforeImagePath: path.join(process.cwd(), 'public/portfolio/3/before.jpg'),
-    afterImagePath: path.join(process.cwd(), 'public/portfolio/3/after.jpeg'),
-    galleryImagePaths: [
-      path.join(process.cwd(), 'public/portfolio/3/gallery1.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/3/gallery2.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/3/gallery3.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/3/gallery4.jpeg'),
-    ],
-    tags: ['Coastal', 'Modern', 'Luxury', 'Indoor-Outdoor'],
-    client: 'Anderson Family',
-    scope: 'Full home renovation, deck construction, landscape design',
-    budget: '$1M+',
-    team: 'Lead Designer: Emily White, Architect: Robert Green, Landscape: GreenScape Design',
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "Simplicity Cisauk",
+    year: "2023",
+    area: "280m² / 30T",
+    completion: "2023",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
+    beforeImagePath: "", // Empty string for projects without before image
+    afterImagePath: path.join(process.cwd(), 'public/portfolio/3/after.jpg'),
+    galleryImagePaths: [], // Empty array for projects without gallery images
+    tags: ["Minimalis", "Tropis", "Modern"],
   },
   {
-    title: 'Urban Apartment Makeover',
-    category: 'Residential',
-    location: 'San Francisco, CA',
-    year: '2023',
-    area: '1,800 sq ft',
-    completion: 'Completed',
-    description: 'A complete redesign of a compact urban apartment to maximize space and functionality while maintaining a modern aesthetic.',
+    title: "Desain Tangga Rumah Tinggal",
+    category: "Desain Interior",
+    location: "Depok",
+    year: "2023",
+    area: "150m² / 15T",
+    completion: "2023",
+    description: "Desain ulang tangga utama dengan material kayu jati dan kaca tempered, menciptakan focal point yang elegan di ruang tamu.",
     beforeImagePath: path.join(process.cwd(), 'public/portfolio/4/before.jpg'),
-    afterImagePath: path.join(process.cwd(), 'public/portfolio/4/after.jpeg'),
+    afterImagePath: path.join(process.cwd(), 'public/portfolio/4/after.jpg'),
     galleryImagePaths: [
-      path.join(process.cwd(), 'public/portfolio/4/gallery1.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/4/gallery2.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/4/gallery3.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/4/gallery4.jpeg'),
+      path.join(process.cwd(), 'public/portfolio/4/gallery1.jpg'),
     ],
-    tags: ['Urban', 'Compact', 'Modern', 'Space-Saving'],
-    client: 'Michael Chen',
-    scope: 'Full apartment renovation, custom cabinetry, space optimization',
-    budget: '$300K - $500K',
-    team: 'Lead Designer: Alex Turner, Interior Architect: Lisa Wang',
+    tags: ["Kayu Jati", "Minimalis", "Elegan"],
   },
   {
-    title: 'Penthouse Sudirman',
-    category: 'Residential',
-    location: 'Jakarta Selatan, DKI Jakarta',
-    year: '2024',
-    area: '350 m²',
-    completion: 'Completed',
-    description: 'Luxurious penthouse renovation in the heart of Jakarta\'s business district with panoramic city views and Indonesian-inspired modern design.',
+    title: "Redesain Dapur dan Kamar Mandi",
+    category: "Renovasi Interior",
+    location: "Maharta",
+    year: "2023",
+    area: "85m² / 20T",
+    completion: "2023",
+    description: "Transformasi dapur dan kamar mandi dengan fungsionalitas optimal, menggunakan material premium dan teknologi smart home.",
     beforeImagePath: path.join(process.cwd(), 'public/portfolio/5/before.jpg'),
-    afterImagePath: path.join(process.cwd(), 'public/portfolio/5/after.jpeg'),
+    afterImagePath: path.join(process.cwd(), 'public/portfolio/5/after.png'),
     galleryImagePaths: [
-      path.join(process.cwd(), 'public/portfolio/5/gallery1.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/5/gallery2.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/5/gallery3.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/5/gallery4.jpeg'),
+      path.join(process.cwd(), 'public/portfolio/5/gallery1.png'),
     ],
-    tags: ['Luxury', 'Penthouse', 'Jakarta', 'City View', 'Modern Indonesian'],
-    client: 'Bapak Ahmad Wijaya',
-    scope: 'Full penthouse renovation, custom furniture, home automation, rooftop garden',
-    budget: 'IDR 2.5M - 3.5M',
-    team: 'Lead Designer: Siti Nurhaliza, Architect: Budi Santoso, Contractor: PT. Mitra Bangun Sejahtera',
+    tags: ["Modern", "Smart Home", "Fungsional"],
   },
   {
-    title: 'Bali-Style Villa in BSD City',
-    category: 'Residential',
-    location: 'Tangerang Selatan, Banten',
-    year: '2023',
-    area: '450 m²',
-    completion: 'Completed',
-    description: 'Tropical modern villa combining Balinese architectural elements with contemporary design, perfect for Jakarta\'s suburban lifestyle.',
+    title: "Desain Interior Kamar Tidur Utama",
+    category: "Desain Interior",
+    location: "Bekasi Barat, Cisauk",
+    year: "2023",
+    area: "120m² / 25T",
+    completion: "2023",
+    description: "Desain ulang total kamar tidur utama dengan konsep resort Bali, menampilkan area lounge dan walk-in closet yang luas.",
     beforeImagePath: path.join(process.cwd(), 'public/portfolio/6/before.jpg'),
-    afterImagePath: path.join(process.cwd(), 'public/portfolio/6/after.jpeg'),
+    afterImagePath: path.join(process.cwd(), 'public/portfolio/6/after.jpg'),
     galleryImagePaths: [
-      path.join(process.cwd(), 'public/portfolio/6/gallery1.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/6/gallery2.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/6/gallery3.jpeg'),
-      path.join(process.cwd(), 'public/portfolio/6/gallery4.jpeg'),
+      path.join(process.cwd(), 'public/portfolio/6/gallery1.jpg'),
     ],
-    tags: ['Tropical', 'Balinese', 'Modern', 'Villa', 'Suburban'],
-    client: 'Keluarga Tanaka',
-    scope: 'New construction, landscape design, swimming pool, outdoor pavilion',
-    budget: 'IDR 3M - 4M',
-    team: 'Lead Designer: Made Wijaya, Architect: I Ketut Suastika, Landscape: Taman Indah Persada',
+    tags: ["Mewah", "Relaksasi"],
   },
 ];
 
@@ -219,12 +179,15 @@ async function seedProjects() {
     for (const [index, project] of sampleProjects.entries()) {
       console.log(`\n📦 Processing project ${index + 1}/${sampleProjects.length}: ${project.title}`);
 
-      // Upload before image
-      console.log('Uploading before image...');
-      const beforeImage = await uploadToCloudinary(
-        project.beforeImagePath,
-        `projects/${project.title.toLowerCase().replace(/\s+/g, '-')}`
-      );
+      // Upload before image (only if it exists)
+      let beforeImage = null;
+      if (project.beforeImagePath) {
+        console.log('Uploading before image...');
+        beforeImage = await uploadToCloudinary(
+          project.beforeImagePath,
+          `projects/${project.title.toLowerCase().replace(/\s+/g, '-')}`
+        );
+      }
 
       // Upload after image
       console.log('Uploading after image...');
@@ -249,8 +212,8 @@ async function seedProjects() {
         }
       }
 
-      // Only insert if we have at least before and after images
-      if (beforeImage && afterImage) {
+      // Only insert if we have at least the after image
+      if (afterImage) {
         // Insert into database
         console.log('Saving to database...');
         await db.insert(projects).values({
@@ -261,23 +224,19 @@ async function seedProjects() {
           area: project.area,
           completion: project.completion,
           description: project.description,
-          beforeImage: beforeImage.url,
-          beforeImagePublicId: beforeImage.publicId,
+          beforeImage: beforeImage?.url || null,
+          beforeImagePublicId: beforeImage?.publicId || null,
           afterImage: afterImage.url,
           afterImagePublicId: afterImage.publicId,
           galleryImages: galleryImages,
           galleryImagePublicIds: galleryPublicIds,
           tags: project.tags,
-          client: project.client,
-          scope: project.scope,
-          budget: project.budget,
-          team: project.team,
         });
 
         console.log(`✓ Project "${project.title}" seeded successfully!`);
         successfulSeeds++;
       } else {
-        console.warn(`⚠️  Skipping project "${project.title}" due to missing required images`);
+        console.warn(`⚠️  Skipping project "${project.title}" due to missing required after image`);
       }
     }
 

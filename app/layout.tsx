@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { IntroProvider } from "@/context/IntroContext";
 
 const spaceGrotesk = Space_Grotesk({
@@ -27,7 +26,7 @@ export default function RootLayout({
       <body className={`${spaceGrotesk.className} antialiased`}>
         <ThemeProvider>
           <IntroProvider>
-            <LayoutWrapper>{children}</LayoutWrapper>
+            {children}
           </IntroProvider>
         </ThemeProvider>
       </body>

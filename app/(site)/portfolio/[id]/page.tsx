@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/immutability */
-// app/portfolio/[id]/page.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// app/(site)/portfolio/[id]/page.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -24,108 +24,6 @@ interface Project {
   galleryImages: string[];
   tags: string[];
 }
-
-// Use the same project data from the portfolio page
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Knock",
-    category: "Renovasi Total",
-    location: "Puri Bintaro",
-    year: "2023",
-    area: "450m² / 48T",
-    completion: "2023",
-    description: "Transformasi total villa tradisional menjadi hunian mewah modern dengan ruang terbuka dan integrasi indoor-outdoor yang seamless.",
-    beforeImage: "/portfolio/1/before.jpg",
-    afterImage: "/portfolio/1/after.jpeg",
-    galleryImages: [
-      "/portfolio/1/gallery1.jpeg",
-      "/portfolio/1/gallery2.jpeg",
-      "/portfolio/1/gallery3.jpeg",
-      "/portfolio/1/gallery4.jpeg",
-    ],
-    tags: ["Modern", "Mewah", "Berkelanjutan"],
-  },
-  {
-    id: 2,
-    title: "Taman Depan Minimalis",
-    category: "Desain Eksterior",
-    location: "Golden Park 2, Cisauk",
-    year: "2023",
-    area: "280m² / 30T",
-    completion: "2023",
-    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
-    beforeImage: "/portfolio/2/before.jpg",
-    afterImage: "/portfolio/2/after.jpg",
-    galleryImages: [
-      "/portfolio/2/gallery1.jpg",
-      "/portfolio/2/gallery2.jpg",
-    ],
-    tags: ["Minimalis", "Tropis", "Modern"],
-  },
-  {
-    id: 3,
-    title: "Taman Depan Minimalis",
-    category: "Desain Eksterior",
-    location: "Simplicity Cisauk",
-    year: "2023",
-    area: "280m² / 30T",
-    completion: "2023",
-    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
-    beforeImage: "",
-    afterImage: "/portfolio/3/after.jpg",
-    galleryImages: [],
-    tags: ["Minimalis", "Tropis", "Modern"],
-  },
-  {
-    id: 4,
-    title: "Desain Tangga Rumah Tinggal",
-    category: "Desain Interior",
-    location: "Depok",
-    year: "2023",
-    area: "150m² / 15T",
-    completion: "2023",
-    description: "Desain ulang tangga utama dengan material kayu jati dan kaca tempered, menciptakan focal point yang elegan di ruang tamu.",
-    beforeImage: "/portfolio/4/before.jpg",
-    afterImage: "/portfolio/4/after.jpg",
-    galleryImages: [
-      "/portfolio/4/gallery1.jpg",
-    ],
-    tags: ["Kayu Jati", "Minimalis", "Elegan"],
-  },
-  {
-    id: 5,
-    title: "Redesain Dapur dan Kamar Mandi",
-    category: "Renovasi Interior",
-    location: "Maharta",
-    year: "2023",
-    area: "85m² / 20T",
-    completion: "2023",
-    description: "Transformasi dapur dan kamar mandi dengan fungsionalitas optimal, menggunakan material premium dan teknologi smart home.",
-    beforeImage: "/portfolio/5/before.jpg",
-    afterImage: "/portfolio/5/after.png",
-    galleryImages: [
-      "/portfolio/5/gallery1.png",
-    ],
-    tags: ["Modern", "Smart Home", "Fungsional"],
-  },
-  {
-    id: 6,
-    title: "Desain Interior Kamar Tidur Utama",
-    category: "Desain Interior",
-    location: "Bekasi Barat, Cisauk",
-    year: "2023",
-    area: "120m² / 25T",
-    completion: "2023",
-    description: "Desain ulang total kamar tidur utama dengan konsep resort Bali, menampilkan area lounge dan walk-in closet yang luas.",
-    beforeImage: "/portfolio/6/before.jpg",
-    afterImage: "/portfolio/6/after.jpg",
-    galleryImages: [
-      "/portfolio/6/gallery1.jpg",
-    ],
-    tags: ["Mewah", "Relaksasi"],
-  },
-];
 
 // Smooth Before/After Animation Component (non-interactive)
 const BeforeAfterAnimation = ({ 
@@ -432,23 +330,50 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   // Fix for Next.js 15+ - unwrap params Promise
   const resolvedParams = use(params);
   
-  // Find project by ID using the same data from portfolio page
-  const project = projects.find(p => p.id === parseInt(resolvedParams.id)) || projects[0];
-  
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showGalleryModal, setShowGalleryModal] = useState(false);
 
+  // Fetch project from API
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/portfoliopublic/${resolvedParams.id}`);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Project not found');
+          }
+          throw new Error('Failed to fetch project');
+        }
+        
+        const data = await response.json();
+        setProject(data);
+      } catch (err: any) {
+        console.error('Error fetching project:', err);
+        setError(err.message || 'Failed to load project');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProject();
+  }, [resolvedParams.id]);
+
   // Prepare all images for gallery
-  const allImages = [
+  const allImages = project ? [
     { type: 'after', src: project.afterImage, label: 'After' },
     ...(project.beforeImage ? [{ type: 'before', src: project.beforeImage, label: 'Before' }] : []),
-    { type: 'before-after', src: '', label: 'Before & After Transformation' },
+    ...(project.beforeImage ? [{ type: 'before-after', src: '', label: 'Before & After Transformation' }] : []),
     ...project.galleryImages.map((img, idx) => ({ 
       type: 'gallery', 
       src: img, 
       label: `Gallery ${idx + 1}` 
     }))
-  ];
+  ] : [];
 
   const openGallery = (index: number) => {
     setSelectedImageIndex(index);
@@ -462,6 +387,35 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const prevImage = () => {
     setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading project...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !project) {
+    return (
+      <div className="min-h-screen bg-background pt-24 flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <h2 className="text-2xl font-bold mb-2">Project Not Found</h2>
+          <p className="text-muted-foreground mb-4">
+            {error || 'The project you\'re looking for doesn\'t exist or has been removed.'}
+          </p>
+          <Link href="/portfolio">
+            <Button>Back to Portfolio</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pt-24">
@@ -625,22 +579,24 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </motion.div>
           )}
 
-          {/* Before/After Animation - Full Width */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="md:col-span-2 relative aspect-[21/9] md:aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group"
-            onClick={() => openGallery(project.beforeImage ? 2 : 1)}
-          >
-            <BeforeAfterAnimation
-              beforeSrc={project.beforeImage}
-              afterSrc={project.afterImage}
-              className="w-full h-full"
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-          </motion.div>
+          {/* Before/After Animation - Full Width - Only show if beforeImage exists */}
+          {project.beforeImage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="md:col-span-2 relative aspect-[21/9] md:aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group"
+              onClick={() => openGallery(2)}
+            >
+              <BeforeAfterAnimation
+                beforeSrc={project.beforeImage}
+                afterSrc={project.afterImage}
+                className="w-full h-full"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+            </motion.div>
+          )}
 
           {/* Gallery Images */}
           {project.galleryImages.map((img, index) => (
@@ -651,7 +607,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               viewport={{ once: true }}
               transition={{ delay: 0.1 * (index + 3) }}
               className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
-              onClick={() => openGallery((project.beforeImage ? 3 : 2) + index)}
+              onClick={() => openGallery((project.beforeImage ? 3 : 1) + index)}
             >
               <Image
                 src={img}

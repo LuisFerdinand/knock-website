@@ -1,5 +1,5 @@
 {
-  "id": "647417cd-838e-4d20-aa44-e1991680934b",
+  "id": "7bf6e4a8-3d39-4376-bd84-74b7c5517a44",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -60,7 +60,7 @@
           "name": "before_image",
           "type": "varchar(500)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "before_image_public_id": {
           "name": "before_image_public_id",
@@ -84,13 +84,15 @@
           "name": "gallery_images",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": "'[]'::jsonb"
         },
         "gallery_image_public_ids": {
           "name": "gallery_image_public_ids",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'[]'::jsonb"
         },
         "tags": {
           "name": "tags",
@@ -121,6 +123,27 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'published'"
+        },
+        "featured": {
+          "name": "featured",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",
