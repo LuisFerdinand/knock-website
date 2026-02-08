@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect, TouchEvent, MouseEvent } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -356,7 +356,7 @@ export default function PortfolioPage() {
                 className="object-cover"
                 priority={index === 0}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
             </div>
           ))}
         </div>
@@ -379,7 +379,7 @@ export default function PortfolioPage() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
               </motion.div>
             ) : currentImageType && currentImageType.type === 'gallery' ? (
               <motion.div 
@@ -396,7 +396,7 @@ export default function PortfolioPage() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -423,14 +423,14 @@ export default function PortfolioPage() {
                   >
                     {selectedProject.title}
                   </motion.h1>
-                  <motion.p 
+                  {/* <motion.p 
                     className="text-lg md:text-xl mt-2 opacity-80"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 0.8 }}
                     transition={{ delay: 0.3 }}
                   >
                     {currentImageType?.label}
-                  </motion.p>
+                  </motion.p> */}
                 </motion.div>
               </AnimatePresence>
 
@@ -461,7 +461,7 @@ export default function PortfolioPage() {
                 {/* Completion - Middle Right */}
                 <motion.div 
                   key={`completion-${selectedProject.id}`}
-                  className="absolute top-1/3 right-12 md:right-28 text-right"
+                  className="absolute top-1/3 right-8 md:right-28 text-right"
                   variants={slideFromRight}
                   initial="initial"
                   animate="animate"
@@ -595,7 +595,7 @@ export default function PortfolioPage() {
                     <path d="M12 15l-5-5 5-5" />
                   </svg>
                 </button>
-                <div className="text-sm text-muted-foreground min-w-[60px] text-center">
+                <div className="text-sm text-muted-foreground min-w-15 text-center">
                   {selectedImageIndex + 1} / {allProjectImages.length}
                 </div>
                 <button

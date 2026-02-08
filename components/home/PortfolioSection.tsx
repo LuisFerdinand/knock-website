@@ -6,23 +6,23 @@ import Image from "next/image";
 const projects = [
   {
     title: "Knock (Puri Bintaro)",
-    category: "Arsitektur",
+    category: "Full Renovation",
     image: "/portfolio/1/after.jpeg",
   },
   {
-    title: "Golden Park2 (Cisauk)",
-    category: "Desain Interior",
+    title: "Knock (Golden Park 2)",
+    category: "Landscaping",
     image: "/portfolio/2/after.jpg",
   },
   {
-    title: "Rumah Minimalis",
-    category: "Desain Interior",
-    image: "/portfolio/3/after.jpg",
+    title: "Knock (Mandar Bintaro)",
+    category: "Design & Build",
+    image: "/portfolio/Bintaro/cover.jpg",
   },
   {
-    title: "Gama (Depok)",
-    category: "Desain Interior",
-    image: "/portfolio/4/after.jpg",
+    title: "Knock (Alam Sutera)",
+    category: "Full Renovation",
+    image: "/portfolio/Alsut/cover.jpg",
   },
 ];
 
@@ -33,7 +33,7 @@ export default function PortfolioSection() {
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="mb-4 text-foreground">Proyek Unggulan</h2>
           <p className="text-lg text-muted-foreground">
-            Jelajahi portofolio proyek desain luar biasa kami
+            Ingin melihat hasil kerja kami? Jelajahi portofolio proyek kami di sini.
           </p>
         </div>
 
