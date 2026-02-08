@@ -537,7 +537,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* After Image */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -554,10 +554,10 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1.5 text-sm rounded-md backdrop-blur-sm">
               After
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Before Image - Only show if beforeImage exists */}
-          {project.beforeImage && (
+          {/* {project.beforeImage && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -577,7 +577,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 Before
               </div>
             </motion.div>
-          )}
+          )} */}
 
           {/* Before/After Animation - Full Width - Only show if beforeImage exists */}
           {project.beforeImage && (
