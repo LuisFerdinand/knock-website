@@ -9,7 +9,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
-// Define types
+// Define types - matching the portfolio page
 interface Project {
   id: number;
   title: string;
@@ -23,11 +23,109 @@ interface Project {
   afterImage: string;
   galleryImages: string[];
   tags: string[];
-  client?: string;
-  scope?: string;
-  budget?: string;
-  team?: string;
 }
+
+// Use the same project data from the portfolio page
+const projects: Project[] = [
+  {
+    id: 1,
+    title: "Knock",
+    category: "Renovasi Total",
+    location: "Puri Bintaro",
+    year: "2023",
+    area: "450m² / 48T",
+    completion: "2023",
+    description: "Transformasi total villa tradisional menjadi hunian mewah modern dengan ruang terbuka dan integrasi indoor-outdoor yang seamless.",
+    beforeImage: "/portfolio/1/before.jpg",
+    afterImage: "/portfolio/1/after.jpeg",
+    galleryImages: [
+      "/portfolio/1/gallery1.jpeg",
+      "/portfolio/1/gallery2.jpeg",
+      "/portfolio/1/gallery3.jpeg",
+      "/portfolio/1/gallery4.jpeg",
+    ],
+    tags: ["Modern", "Mewah", "Berkelanjutan"],
+  },
+  {
+    id: 2,
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "Golden Park 2, Cisauk",
+    year: "2023",
+    area: "280m² / 30T",
+    completion: "2023",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
+    beforeImage: "/portfolio/2/before.jpg",
+    afterImage: "/portfolio/2/after.jpg",
+    galleryImages: [
+      "/portfolio/2/gallery1.jpg",
+      "/portfolio/2/gallery2.jpg",
+    ],
+    tags: ["Minimalis", "Tropis", "Modern"],
+  },
+  {
+    id: 3,
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "Simplicity Cisauk",
+    year: "2023",
+    area: "280m² / 30T",
+    completion: "2023",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
+    beforeImage: "",
+    afterImage: "/portfolio/3/after.jpg",
+    galleryImages: [],
+    tags: ["Minimalis", "Tropis", "Modern"],
+  },
+  {
+    id: 4,
+    title: "Desain Tangga Rumah Tinggal",
+    category: "Desain Interior",
+    location: "Depok",
+    year: "2023",
+    area: "150m² / 15T",
+    completion: "2023",
+    description: "Desain ulang tangga utama dengan material kayu jati dan kaca tempered, menciptakan focal point yang elegan di ruang tamu.",
+    beforeImage: "/portfolio/4/before.jpg",
+    afterImage: "/portfolio/4/after.jpg",
+    galleryImages: [
+      "/portfolio/4/gallery1.jpg",
+    ],
+    tags: ["Kayu Jati", "Minimalis", "Elegan"],
+  },
+  {
+    id: 5,
+    title: "Redesain Dapur dan Kamar Mandi",
+    category: "Renovasi Interior",
+    location: "Maharta",
+    year: "2023",
+    area: "85m² / 20T",
+    completion: "2023",
+    description: "Transformasi dapur dan kamar mandi dengan fungsionalitas optimal, menggunakan material premium dan teknologi smart home.",
+    beforeImage: "/portfolio/5/before.jpg",
+    afterImage: "/portfolio/5/after.png",
+    galleryImages: [
+      "/portfolio/5/gallery1.png",
+    ],
+    tags: ["Modern", "Smart Home", "Fungsional"],
+  },
+  {
+    id: 6,
+    title: "Desain Interior Kamar Tidur Utama",
+    category: "Desain Interior",
+    location: "Bekasi Barat, Cisauk",
+    year: "2023",
+    area: "120m² / 25T",
+    completion: "2023",
+    description: "Desain ulang total kamar tidur utama dengan konsep resort Bali, menampilkan area lounge dan walk-in closet yang luas.",
+    beforeImage: "/portfolio/6/before.jpg",
+    afterImage: "/portfolio/6/after.jpg",
+    galleryImages: [
+      "/portfolio/6/gallery1.jpg",
+    ],
+    tags: ["Mewah", "Relaksasi"],
+  },
+];
 
 // Smooth Before/After Animation Component (non-interactive)
 const BeforeAfterAnimation = ({ 
@@ -111,6 +209,31 @@ const BeforeAfterAnimation = ({
       }
     };
   }, []);
+
+  // Handle case where beforeSrc is empty
+  if (!beforeSrc) {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        <div className="absolute inset-0">
+          <Image
+            src={afterSrc}
+            alt="After"
+            fill
+            className="object-cover"
+          />
+        </div>
+        
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute top-4 right-4 bg-black/70 text-white px-4 py-2 text-sm font-medium rounded-md backdrop-blur-sm"
+        >
+          After
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
@@ -305,59 +428,11 @@ const GalleryModal = ({
   );
 };
 
-// Mock project data - replace with actual data fetching
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Modern Villa Renovation",
-    category: "Complete Renovation",
-    location: "Beverly Hills, CA",
-    year: "2023",
-    area: "450m² / 48T",
-    completion: "2023",
-    description: "Complete transformation of a traditional villa into a modern luxury residence with open-plan living spaces and seamless indoor-outdoor integration.",
-    beforeImage: "/portfolio/1/before.jpg",
-    afterImage: "/portfolio/1/after.jpeg",
-    galleryImages: [
-      "/portfolio/1/gallery1.jpeg",
-      "/portfolio/1/gallery2.jpeg",
-      "/portfolio/1/gallery3.jpeg",
-      "/portfolio/1/gallery4.jpeg",
-    ],
-    tags: ["Modern", "Luxury", "Sustainable"],
-    client: "Private Residence",
-    scope: "Full renovation including structural modifications, interior design, and landscaping",
-    budget: "$2.5M - $3M",
-    team: "Lead Architect: John Smith | Interior Designer: Jane Doe | Contractor: Build Co."
-  },
-  {
-    id: 2,
-    title: "Urban Apartment Transformation",
-    category: "Interior Design",
-    location: "Manhattan, NY",
-    year: "2023",
-    area: "280m² / 30T",
-    completion: "2023",
-    description: "Complete redesign of a high-end apartment interior showcasing minimalist design with premium materials and smart home integration.",
-    beforeImage: "/portfolio/2/before.jpg",
-    afterImage: "/portfolio/2/after.jpg",
-    galleryImages: [
-      "/portfolio/2/gallery1.jpg",
-      "/portfolio/2/gallery2.jpg",
-    ],
-    tags: ["Contemporary", "Luxury", "Urban"],
-    client: "Private Client",
-    scope: "Interior design and smart home integration",
-    budget: "$800K - $1M",
-    team: "Interior Designer: Sarah Johnson | Smart Home: Tech Solutions"
-  }
-];
-
 export default function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // Fix for Next.js 15+ - unwrap params Promise
   const resolvedParams = use(params);
   
-  // In real app, fetch project by ID
+  // Find project by ID using the same data from portfolio page
   const project = projects.find(p => p.id === parseInt(resolvedParams.id)) || projects[0];
   
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -366,7 +441,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   // Prepare all images for gallery
   const allImages = [
     { type: 'after', src: project.afterImage, label: 'After' },
-    { type: 'before', src: project.beforeImage, label: 'Before' },
+    ...(project.beforeImage ? [{ type: 'before', src: project.beforeImage, label: 'Before' }] : []),
     { type: 'before-after', src: '', label: 'Before & After Transformation' },
     ...project.galleryImages.map((img, idx) => ({ 
       type: 'gallery', 
@@ -389,7 +464,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <div className="min-h-screen bg-background pt-">
+    <div className="min-h-screen bg-background pt-24">
       {/* Back Button - Fixed at top with proper z-index */}
       <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 py-4">
@@ -472,33 +547,8 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            <div className="text-xs md:text-sm text-muted-foreground mb-2 uppercase tracking-wider">Client</div>
-            <div className="text-lg md:text-2xl font-semibold">{project.client || 'Private'}</div>
-          </motion.div>
-        </div>
-
-        {/* Additional Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-xl md:text-2xl font-bold mb-4">Project Scope</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              {project.scope}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-xl md:text-2xl font-bold mb-4">Project Team</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              {project.team}
-            </p>
+            <div className="text-xs md:text-sm text-muted-foreground mb-2 uppercase tracking-wider">Year</div>
+            <div className="text-lg md:text-2xl font-semibold">{project.year}</div>
           </motion.div>
         </div>
 
@@ -552,26 +602,28 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </div>
           </motion.div>
 
-          {/* Before Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
-            onClick={() => openGallery(1)}
-          >
-            <Image
-              src={project.beforeImage}
-              alt="Before"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-            <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1.5 text-sm rounded-md backdrop-blur-sm">
-              Before
-            </div>
-          </motion.div>
+          {/* Before Image - Only show if beforeImage exists */}
+          {project.beforeImage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
+              onClick={() => openGallery(1)}
+            >
+              <Image
+                src={project.beforeImage}
+                alt="Before"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+              <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1.5 text-sm rounded-md backdrop-blur-sm">
+                Before
+              </div>
+            </motion.div>
+          )}
 
           {/* Before/After Animation - Full Width */}
           <motion.div
@@ -580,7 +632,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
             className="md:col-span-2 relative aspect-[21/9] md:aspect-[16/9] rounded-lg overflow-hidden cursor-pointer group"
-            onClick={() => openGallery(2)}
+            onClick={() => openGallery(project.beforeImage ? 2 : 1)}
           >
             <BeforeAfterAnimation
               beforeSrc={project.beforeImage}
@@ -599,7 +651,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               viewport={{ once: true }}
               transition={{ delay: 0.1 * (index + 3) }}
               className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
-              onClick={() => openGallery(index + 3)}
+              onClick={() => openGallery((project.beforeImage ? 3 : 2) + index)}
             >
               <Image
                 src={img}
@@ -648,7 +700,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               size="lg" 
               className=""
             >
-              schedule a meeting
+              Schedule a meeting
             </Button>
           </motion.div>
         </div>
