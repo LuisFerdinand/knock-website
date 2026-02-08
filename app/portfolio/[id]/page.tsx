@@ -389,7 +389,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background pt-">
       {/* Back Button - Fixed at top with proper z-index */}
       <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 py-4">

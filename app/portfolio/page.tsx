@@ -140,13 +140,13 @@ const BeforeAfterComparison = ({ beforeSrc, afterSrc, className = "" }: BeforeAf
 const projects: Project[] = [
   {
     id: 1,
-    title: "Modern Villa Renovation",
-    category: "Complete Renovation",
-    location: "Beverly Hills, CA",
+    title: "Villa Modern di Kemang",
+    category: "Renovasi Total",
+    location: "Kemang, Jakarta Selatan",
     year: "2023",
     area: "450m² / 48T",
     completion: "2023",
-    description: "Complete transformation of a traditional villa into a modern luxury residence with open-plan living spaces and seamless indoor-outdoor integration.",
+    description: "Transformasi total villa tradisional menjadi hunian mewah modern dengan ruang terbuka dan integrasi indoor-outdoor yang seamless.",
     beforeImage: "/portfolio/1/before.jpg",
     afterImage: "/portfolio/1/after.jpeg",
     galleryImages: [
@@ -155,25 +155,89 @@ const projects: Project[] = [
       "/portfolio/1/gallery3.jpeg",
       "/portfolio/1/gallery4.jpeg",
     ],
-    tags: ["Modern", "Luxury", "Sustainable"],
+    tags: ["Modern", "Mewah", "Berkelanjutan"],
   },
   {
     id: 2,
-    title: "Urban Apartment Transformation",
-    category: "Interior Design",
-    location: "Manhattan, NY",
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "BSD City, Tangerang",
     year: "2023",
     area: "280m² / 30T",
     completion: "2023",
-    description: "Complete redesign of a high-end apartment interior showcasing minimalist design with premium materials and smart home integration.",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
     beforeImage: "/portfolio/2/before.jpg",
     afterImage: "/portfolio/2/after.jpg",
     galleryImages: [
       "/portfolio/2/gallery1.jpg",
       "/portfolio/2/gallery2.jpg",
     ],
-    tags: ["Contemporary", "Luxury", "Urban"],
-  }
+    tags: ["Minimalis", "Tropis", "Modern"],
+  },
+   {
+    id: 3,
+    title: "Taman Depan Minimalis",
+    category: "Desain Eksterior",
+    location: "BSD City, Tangerang",
+    year: "2023",
+    area: "280m² / 30T",
+    completion: "2023",
+    description: "Redesain total taman depan dengan konsep minimalis tropis, menampilkan tanaman hijau asli Indonesia dan elemen batu alam.",
+    beforeImage: "",
+    afterImage: "/portfolio/3/after.jpg",
+    galleryImages: [
+      
+    ],
+    tags: ["Minimalis", "Tropis", "Modern"],
+  },
+  {
+    id: 4,
+    title: "Desain Tangga Rumah Tinggal",
+    category: "Desain Interior",
+    location: "Kelapa Gading, Jakarta Utara",
+    year: "2023",
+    area: "150m² / 15T",
+    completion: "2023",
+    description: "Desain ulang tangga utama dengan material kayu jati dan kaca tempered, menciptakan focal point yang elegan di ruang tamu.",
+    beforeImage: "/portfolio/4/before.jpg",
+    afterImage: "/portfolio/4/after.jpg",
+    galleryImages: [
+      "/portfolio/4/gallery1.jpg",
+    ],
+    tags: ["Kayu Jati", "Minimalis", "Elegan"],
+  },
+  {
+    id: 5,
+    title: "Redesain Dapur dan Kamar Mandi",
+    category: "Renovasi Interior",
+    location: "Senayan, Jakarta Pusat",
+    year: "2023",
+    area: "85m² / 20T",
+    completion: "2023",
+    description: "Transformasi dapur dan kamar mandi dengan fungsionalitas optimal, menggunakan material premium dan teknologi smart home.",
+    beforeImage: "/portfolio/5/before.jpg",
+    afterImage: "/portfolio/5/after.png",
+    galleryImages: [
+      "/portfolio/5/gallery1.png",
+    ],
+    tags: ["Modern", "Smart Home", "Fungsional"],
+  },
+  {
+    id: 6,
+    title: "Desain Interior Kamar Tidur Utama",
+    category: "Desain Interior",
+    location: "Pondok Indah, Jakarta Selatan",
+    year: "2023",
+    area: "120m² / 25T",
+    completion: "2023",
+    description: "Desain ulang total kamar tidur utama dengan konsep resort Bali, menampilkan area lounge dan walk-in closet yang luas.",
+    beforeImage: "/portfolio/6/before.jpg",
+    afterImage: "/portfolio/6/after.jpg",
+    galleryImages: [
+      "/portfolio/6/gallery1.jpg",
+    ],
+    tags: ["Resort Bali", "Mewah", "Relaksasi"],
+  },
 ];
 
 export default function PortfolioPage() {
@@ -544,7 +608,7 @@ export default function PortfolioPage() {
               {/* Project Title - Top Left Area */}
               <motion.div 
                 key={`title-${selectedProject.id}`}
-                className="absolute top-28 left-8 md:left-16 max-w-2xl"
+                className="absolute top-28 left-10 md:left-16 max-w-2xl"
                 variants={titleVariants}
                 initial="initial"
                 animate="animate"
@@ -558,7 +622,7 @@ export default function PortfolioPage() {
                   {selectedProject.title}
                 </motion.h1>
                 <motion.p 
-                  className="text-lg md:text-xl mt-2 opacity-80 ml-4 md:ml-0"
+                  className="text-lg md:text-xl mt-2 opacity-80"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.8 }}
                   transition={{ delay: 0.3 }}
@@ -585,7 +649,7 @@ export default function PortfolioPage() {
                   animate={{ opacity: 0.7 }}
                   transition={{ delay: 0.15, duration: 0.3 }}
                 >
-                  Area
+                  Luas
                 </motion.div>
                 <div className="text-xl md:text-3xl font-bold">{selectedProject.area}</div>
               </motion.div>
@@ -608,7 +672,7 @@ export default function PortfolioPage() {
                   animate={{ opacity: 0.7 }}
                   transition={{ delay: 0.18, duration: 0.3 }}
                 >
-                  Completion
+                  Selesai
                 </motion.div>
                 <div className="text-lg md:text-2xl font-semibold">{selectedProject.completion}</div>
               </motion.div>
@@ -631,7 +695,7 @@ export default function PortfolioPage() {
                   animate={{ opacity: 0.7 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                 >
-                  Location
+                  Lokasi
                 </motion.div>
                 <div className="text-lg md:text-2xl font-semibold">{selectedProject.location}</div>
               </motion.div>
@@ -669,7 +733,7 @@ export default function PortfolioPage() {
                     size="lg"
                     className="bg-primary hover:bg-primary-900 text-white shadow-lg"
                   >
-                    View Full Project
+                    Lihat Proyek Lengkap
                   </Button>
                 </Link>
               </motion.div>

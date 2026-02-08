@@ -1,0 +1,23 @@
+CREATE TABLE "projects" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"category" varchar(100) NOT NULL,
+	"location" varchar(255) NOT NULL,
+	"year" varchar(10) NOT NULL,
+	"area" varchar(50) NOT NULL,
+	"completion" varchar(10) NOT NULL,
+	"description" text NOT NULL,
+	"before_image" varchar(500) NOT NULL,
+	"before_image_public_id" varchar(500),
+	"after_image" varchar(500) NOT NULL,
+	"after_image_public_id" varchar(500),
+	"gallery_images" jsonb NOT NULL,
+	"gallery_image_public_ids" jsonb,
+	"tags" jsonb NOT NULL,
+	"client" varchar(255),
+	"scope" text,
+	"budget" varchar(100),
+	"team" text,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
+);
