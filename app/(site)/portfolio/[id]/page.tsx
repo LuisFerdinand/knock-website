@@ -656,7 +656,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               size="lg" 
               className=""
             >
-              Schedule a meeting
+              Konsultasi dengan Kami
             </Button>
           </motion.div>
         </div>
