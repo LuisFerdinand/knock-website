@@ -98,7 +98,7 @@ export default function Header() {
             <Link
               href="/schedule"
             >
-              Schedule Meeting
+              Konsultasi dengan Kami
             </Link>
           </Button>
         </div>
@@ -156,7 +156,7 @@ export default function Header() {
                 <Link
                   href="/schedule"
                 >
-                  Schedule Meeting
+                  Konsultasi dengan Kami
                 </Link>
               </Button>
             </div>
