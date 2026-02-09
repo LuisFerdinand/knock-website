@@ -42,7 +42,7 @@ const services = [
     id: "design-visualization",
     icon: Eye,
     title: "Design Visualization",
-    description: "Desain denah dan visual 3D ringan untuk membantu melihat dan menyesuaikan kebutuhan sebelum renovasi dimulai.",
+    description: "Desain denah gambar kerja dan visual 3D untuk membantu melihat dan menyesuaikan kebutuhan sebelum renovasi atau pembangunan dimulai.",
     duration: "1-2 minggu",
     features: [
       "Pembuatan denah layout ruangan",
@@ -57,7 +57,7 @@ const services = [
     id: "consultation-survey",
     icon: MessageSquare,
     title: "Consultation & Survey",
-    description: "Konsultasi kebutuhan renovasi dan survey lokasi untuk menentukan solusi terbaik.",
+    description: "Konsultasi kebutuhan pembangunan atau renovasi dan survey lokasi untuk menentukan solusi terbaik.",
     duration: "1-3 hari",
     features: [
       "Konsultasi kebutuhan detail",
@@ -87,7 +87,7 @@ const services = [
     id: "project-execution",
     icon: Wrench,
     title: "Project Execution",
-    description: "Pengerjaan renovasi oleh tim tukang berpengalaman dengan pengawasan langsung agar hasil sesuai rencana.",
+    description: "Pengerjaan pembangunan atau renovasi oleh tim tukang berpengalaman dengan pengawasan langsung agar hasil sesuai rencana.",
     duration: "Sesuai skala proyek",
     features: [
       "Tim tukang berpengalaman",
