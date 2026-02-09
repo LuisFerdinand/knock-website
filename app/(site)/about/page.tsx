@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/(site)/about/page.tsx
 "use client";
 
@@ -5,31 +6,33 @@ import { CheckCircle, Users, Award, Lightbulb, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
-const values = [
+// Fallback data
+const fallbackValues = [
   {
-    icon: Award,
+    icon: "Award",
     title: "Kualitas Terbaik",
     description: "Kami berkomitmen memberikan hasil kerja dengan standar tertinggi untuk setiap proyek.",
   },
   {
-    icon: Users,
+    icon: "Users",
     title: "Tim Profesional",
     description: "Tim kami terdiri dari desainer dan arsitek berpengalaman dengan passion dalam bidangnya.",
   },
   {
-    icon: Lightbulb,
+    icon: "Lightbulb",
     title: "Inovasi Berkelanjutan",
     description: "Kami selalu mencari solusi kreatif dan berkelanjutan untuk setiap tantangan desain.",
   },
   {
-    icon: CheckCircle,
+    icon: "CheckCircle",
     title: "Kepuasan Klien",
     description: "Kepuasan klien adalah prioritas utama kami, kami berusaha melampaui ekspektasi.",
   },
 ];
 
-const team = [
+const fallbackTeam = [
   {
     name: "Andi Pratama",
     position: "Principal Architect",
@@ -52,7 +55,96 @@ const team = [
   },
 ];
 
+const fallbackContent = {
+  mainAbout: {
+    title: "Menciptakan Ruang yang Menginspirasi",
+    highlightText: "Menginspirasi",
+    description: "KNOCK adalah Home & Space Improvement Studio yang membantu pemilik rumah meningkatkan kualitas ruang hidup—baik dari sisi fungsi, estetika, maupun kenyamanan. Kami percaya bahwa rumah bukan sekedar membangun atau memperbaiki, tetapi tentang meningkatkan cara sebuah ruang digunakan dan dirasakan. Karena itu, setiap proyek KNOCK dimulai dengan pemahaman kebutuhan klien, visualisasi desain yang jelas, dan perencanaan yang terukur.",
+    image: "/about/Bricks.png",
+  },
+  hero: {
+    title: "Tentang Knock Studio",
+    highlightText: "Knock Studio",
+    description: "Menciptakan ruang impian sejak tahun 2021 dengan desain yang inovatif dan berkelanjutan.",
+    image: "/about/aset1.png",
+  },
+};
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Award,
+  Users,
+  Lightbulb,
+  CheckCircle,
+};
+
 export default function AboutPage() {
+  const [values, setValues] = useState(fallbackValues);
+  const [team, setTeam] = useState(fallbackTeam);
+  const [content, setContent] = useState(fallbackContent);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch values
+        const valuesRes = await fetch('/api/about/values');
+        if (valuesRes.ok) {
+          const valuesData = await valuesRes.json();
+          if (valuesData.success && valuesData.data.length > 0) {
+            setValues(valuesData.data);
+          }
+        }
+
+        // Fetch team members
+        const teamRes = await fetch('/api/about/team');
+        if (teamRes.ok) {
+          const teamData = await teamRes.json();
+          if (teamData.success && teamData.data.length > 0) {
+            setTeam(teamData.data);
+          }
+        }
+
+        // Fetch content sections
+        const contentRes = await fetch('/api/about/content');
+        if (contentRes.ok) {
+          const contentData = await contentRes.json();
+          if (contentData.success && contentData.data.length > 0) {
+            const sections = contentData.data;
+            const newContent: any = { ...fallbackContent };
+            
+            sections.forEach((section: any) => {
+              if (section.sectionId === 'main-about') {
+                newContent.mainAbout = {
+                  title: section.title,
+                  highlightText: section.highlightText,
+                  description: section.description,
+                  image: section.image,
+                };
+              } else if (section.sectionId === 'hero') {
+                newContent.hero = {
+                  title: section.title,
+                  highlightText: section.highlightText,
+                  description: section.description,
+                  image: section.image,
+                };
+              }
+            });
+            
+            setContent(newContent);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching about data:', error);
+        // Keep using fallback data
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* About Section */}
@@ -62,11 +154,12 @@ export default function AboutPage() {
             {/* Content Side */}
             <div className="space-y-6">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-                Menciptakan Ruang yang <span className="text-(--color-secondary)">Menginspirasi</span>
+                {content.mainAbout.title.replace(content.mainAbout.highlightText || '', '')}
+                <span className="text-(--color-secondary)">{content.mainAbout.highlightText}</span>
               </h2>
               
               <p className="text-lg text-muted-foreground leading-relaxed">
-               KNOCK adalah <span className="font-bold"> Home & Space Improvement Studio </span> yang membantu pemilik rumah meningkatkan kualitas ruang hidup—baik dari sisi fungsi, estetika, maupun kenyamanan. Kami percaya bahwa rumah bukan sekedar membangun atau memperbaiki, tetapi tentang meningkatkan cara sebuah ruang digunakan dan dirasakan. Karena itu, setiap proyek KNOCK dimulai dengan pemahaman kebutuhan klien, visualisasi desain yang jelas, dan perencanaan yang terukur.
+                {content.mainAbout.description}
               </p>
 
               {/* <div className="grid grid-cols-2 gap-8 pt-8">
@@ -85,7 +178,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-4/3 rounded-2xl overflow-hidden shadow-2xl relative">
                 <Image
-                  src="/about/Bricks.png"
+                  src={content.mainAbout.image}
                   alt="Knock Studio Team"
                   fill
                   className="object-cover"
@@ -103,10 +196,11 @@ export default function AboutPage() {
           {/* Content on the left */}
           <div className="w-full lg:w-1/2 z-10">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground">
-              Tentang <span className="text-foreground">Knock Studio</span>
+              {content.hero.title.replace(content.hero.highlightText || '', '')}
+              <span className="text-foreground">{content.hero.highlightText}</span>
             </h1>
             <p className="text-lg md:text-xl mb-8 text-muted-foreground max-w-lg">
-              Menciptakan ruang impian sejak tahun 2021 dengan desain yang inovatif dan berkelanjutan.
+              {content.hero.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/schedule">
@@ -127,7 +221,7 @@ export default function AboutPage() {
           <div className="w-full lg:w-1/2 relative">
             <div className="aspect-4/3 lg:aspect-square rounded-2xl overflow-hidden shadow-2xl relative">
               <Image
-                src="/about/aset1.png"
+                src={content.hero.image}
                 alt="Modern architecture"
                 fill
                 className="object-cover"
@@ -139,13 +233,6 @@ export default function AboutPage() {
             <div className="absolute -bottom-6 -right-6 w-2/3 h-2/3 bg-[var(--color-secondary)]/10 rounded-2xl -z-10 hidden lg:block"></div>
           </div>
         </div>
-
-        {/* Scroll Indicator */}
-        {/* <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="w-6 h-10 border-2 border-(--color-primary) rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-(--color-primary) rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div> */}
       </section>
 
       {/* Values Section */}
@@ -160,7 +247,7 @@ export default function AboutPage() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => {
-              const Icon = value.icon;
+              const Icon = iconMap[value.icon] || Award;
               return (
                 <div 
                   key={index} 
