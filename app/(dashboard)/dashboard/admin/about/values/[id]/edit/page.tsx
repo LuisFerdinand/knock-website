@@ -43,29 +43,29 @@ export default function EditAboutValuePage() {
 
   const fetchValue = async () => {
     try {
-      const response = await fetch("/api/admin/about/values");
+      const response = await fetch(`/api/admin/about/values/${id}`);
       
-      if (!response.ok) throw new Error("Failed to fetch values");
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch value: ${errorText}`);
+      }
 
       const data = await response.json();
-      const value = data.data.find((v: AboutValue) => v.id === parseInt(id));
-
-      if (!value) {
-        toast.error("Value not found");
-        router.push("/dashboard/admin/about");
-        return;
+      
+      if (!data.success) {
+        throw new Error(data.error || "Failed to fetch value");
       }
 
       setFormData({
-        icon: value.icon,
-        title: value.title,
-        description: value.description,
-        order: value.order,
-        isActive: value.isActive,
+        icon: data.data.icon,
+        title: data.data.title,
+        description: data.data.description,
+        order: data.data.order,
+        isActive: data.data.isActive,
       });
     } catch (error) {
       console.error("Fetch error:", error);
-      toast.error("Failed to fetch value");
+      toast.error(error instanceof Error ? error.message : "Failed to fetch value");
       router.push("/dashboard/admin/about");
     } finally {
       setIsLoading(false);
@@ -92,9 +92,14 @@ export default function EditAboutValuePage() {
         body: JSON.stringify(formData),
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to update value: ${errorText}`);
+      }
+
       const data = await response.json();
 
-      if (!response.ok || !data.success) {
+      if (!data.success) {
         throw new Error(data.error || "Failed to update value");
       }
 
@@ -102,7 +107,7 @@ export default function EditAboutValuePage() {
       router.push("/dashboard/admin/about");
     } catch (error) {
       console.error("Update error:", error);
-      toast.error("Failed to update value");
+      toast.error(error instanceof Error ? error.message : "Failed to update value");
     } finally {
       setIsSubmitting(false);
     }

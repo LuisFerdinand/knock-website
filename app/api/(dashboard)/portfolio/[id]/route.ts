@@ -9,7 +9,7 @@ const updateSchema = z.object({
   location: z.string().min(1).optional(),
   year: z.string().min(1).optional(),
   area: z.string().min(1).optional(),
-  completion: z.string().min(1).optional(),
+  completion: z.enum(['completed', 'in progress']).optional(), // Updated to include "in progress"
   description: z.string().min(1).optional(),
   tags: z.array(z.string()).optional(),
   client: z.string().optional().nullable(),

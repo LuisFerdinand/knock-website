@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// app/(dashboard)/dashboard/portfolio/edit/[id]/page.tsx
+// app/(dashboard)/dashboard/admin/portfolio/edit/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -46,10 +46,11 @@ interface Project {
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('content');
+  const [tagsInput, setTagsInput] = useState('');
   
   const [formData, setFormData] = useState({
     title: '',
@@ -57,7 +58,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     location: '',
     year: '',
     area: '',
-    completion: '',
+    completion: 'completed' as 'completed' | 'in progress',
     description: '',
     tags: [] as string[],
     client: '',
@@ -97,35 +98,36 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           location: data.location,
           year: data.year,
           area: data.area,
-          completion: data.completion,
+          completion: data.completion || 'completed',
           description: data.description,
-          tags: data.tags,
+          tags: data.tags || [],
           client: data.client || '',
           scope: data.scope || '',
           budget: data.budget || '',
           team: data.team || '',
-          status: data.status,
-          featured: data.featured,
-          order: data.order,
+          status: data.status || 'published',
+          featured: data.featured || false,
+          order: data.order || 0,
         });
+        setTagsInput((data.tags || []).join(', '));
         setImageData({
           beforeImage: data.beforeImage || '',
           beforeImagePublicId: data.beforeImagePublicId || '',
-          afterImage: data.afterImage,
+          afterImage: data.afterImage || '',
           afterImagePublicId: data.afterImagePublicId || '',
-          galleryImages: data.galleryImages.map((url: string, index: number) => ({
+          galleryImages: (data.galleryImages || []).map((url: string, index: number) => ({
             url,
-            publicId: data.galleryImagePublicIds?.[index] || '',
+            publicId: (data.galleryImagePublicIds || [])[index] || '',
             id: `${index}`,
           })),
         });
       } else {
         toast.error('Failed to fetch project');
-        router.push('/dashboard/portfolio');
+        router.push('/dashboard/admin/portfolio');
       }
     } catch (error) {
       toast.error('Failed to fetch project');
-      router.push('/dashboard/portfolio');
+      router.push('/dashboard/admin/portfolio');
     } finally {
       setLoading(false);
     }
@@ -136,7 +138,6 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     
     if (!project) return;
 
-    // Validate required images
     if (!imageData.afterImage) {
       toast.error('After image is required');
       setActiveTab('images');
@@ -166,7 +167,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
 
       if (response.ok) {
         toast.success('Project updated successfully');
-        router.push('/dashboard/portfolio');
+        router.push('/dashboard/admin/portfolio');
       } else {
         const error = await response.json();
         throw new Error(error.error || 'Failed to update project');
@@ -179,7 +180,8 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
   };
 
   const handleTagsChange = (value: string) => {
-    const tags = value.split(',').map(tag => tag.trim()).filter(Boolean);
+    setTagsInput(value);
+    const tags = value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
     setFormData({ ...formData, tags });
   };
 
@@ -200,7 +202,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">Project not found</h2>
           <p className="text-muted-foreground mb-4">The project you&apos;re looking for doesn&apos;t exist.</p>
-          <Link href="/dashboard/portfolio">
+          <Link href="/dashboard/admin/portfolio">
             <Button>Back to Portfolio</Button>
           </Link>
         </div>
@@ -212,7 +214,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
-          <Link href="/dashboard/portfolio">
+          <Link href="/dashboard/admin/portfolio">
             <Button variant="ghost" size="sm" className="mr-4">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Portfolio
@@ -301,13 +303,20 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   </div>
                   <div>
                     <Label htmlFor="completion">Completion *</Label>
-                    <Input
-                      id="completion"
+                    <Select
                       value={formData.completion}
-                      onChange={(e) => setFormData({ ...formData, completion: e.target.value })}
-                      placeholder="Q2 2024"
-                      required
-                    />
+                      onValueChange={(value: 'completed' | 'in progress') =>
+                        setFormData({ ...formData, completion: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="completed">Completed</SelectItem>
+                        <SelectItem value="in progress">In Progress</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -327,7 +336,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   <Label htmlFor="tags">Tags *</Label>
                   <Input
                     id="tags"
-                    value={formData.tags.join(', ')}
+                    value={tagsInput}
                     onChange={(e) => handleTagsChange(e.target.value)}
                     placeholder="Modern, Luxury, Minimalist"
                   />
@@ -338,7 +347,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
               </CardContent>
             </Card>
 
-            <Card>
+             <Card>
               <CardHeader>
                 <CardTitle>Additional Information</CardTitle>
               </CardHeader>
@@ -387,7 +396,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardHeader>
                 <CardTitle>Publishing Settings</CardTitle>
@@ -500,7 +509,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
         </Tabs>
 
         <div className="flex justify-between items-center pt-6 border-t">
-          <Link href="/dashboard/portfolio">
+          <Link href="/dashboard/admin/portfolio">
             <Button variant="outline" type="button">
               Cancel
             </Button>

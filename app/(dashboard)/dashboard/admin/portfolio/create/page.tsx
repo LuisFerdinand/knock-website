@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// app/(dashboard)/dashboard/portfolio/create/page.tsx
+// app/(dashboard)/dashboard/admin/portfolio/create/page.tsx
 "use client";
 
 import { useState } from 'react';
@@ -23,6 +23,7 @@ export default function CreateProjectPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('content');
+  const [tagsInput, setTagsInput] = useState('');
   
   const [formData, setFormData] = useState({
     title: '',
@@ -30,7 +31,7 @@ export default function CreateProjectPage() {
     location: '',
     year: '',
     area: '',
-    completion: '',
+    completion: 'completed' as 'completed' | 'in progress',
     description: '',
     tags: [] as string[],
     client: '',
@@ -52,8 +53,7 @@ export default function CreateProjectPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate required images
+    
     if (!imageData.afterImage) {
       toast.error('After image is required');
       setActiveTab('images');
@@ -83,7 +83,7 @@ export default function CreateProjectPage() {
 
       if (response.ok) {
         toast.success('Project created successfully');
-        router.push('/dashboard/portfolio');
+        router.push('/dashboard/admin/portfolio');
       } else {
         const error = await response.json();
         throw new Error(error.error || 'Failed to create project');
@@ -96,7 +96,8 @@ export default function CreateProjectPage() {
   };
 
   const handleTagsChange = (value: string) => {
-    const tags = value.split(',').map(tag => tag.trim()).filter(Boolean);
+    setTagsInput(value);
+    const tags = value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
     setFormData({ ...formData, tags });
   };
 
@@ -104,7 +105,7 @@ export default function CreateProjectPage() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
-          <Link href="/dashboard/portfolio">
+          <Link href="/dashboard/admin/portfolio">
             <Button variant="ghost" size="sm" className="mr-4">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Portfolio
@@ -193,13 +194,20 @@ export default function CreateProjectPage() {
                   </div>
                   <div>
                     <Label htmlFor="completion">Completion *</Label>
-                    <Input
-                      id="completion"
+                    <Select
                       value={formData.completion}
-                      onChange={(e) => setFormData({ ...formData, completion: e.target.value })}
-                      placeholder="Q2 2024"
-                      required
-                    />
+                      onValueChange={(value: 'completed' | 'in progress') =>
+                        setFormData({ ...formData, completion: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="completed">Completed</SelectItem>
+                        <SelectItem value="in progress">In Progress</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -219,7 +227,7 @@ export default function CreateProjectPage() {
                   <Label htmlFor="tags">Tags *</Label>
                   <Input
                     id="tags"
-                    value={formData.tags.join(', ')}
+                    value={tagsInput}
                     onChange={(e) => handleTagsChange(e.target.value)}
                     placeholder="Modern, Luxury, Minimalist"
                   />
@@ -279,7 +287,7 @@ export default function CreateProjectPage() {
                 </div>
               </CardContent>
             </Card>
-
+            
             <Card>
               <CardHeader>
                 <CardTitle>Publishing Settings</CardTitle>
@@ -392,7 +400,7 @@ export default function CreateProjectPage() {
         </Tabs>
 
         <div className="flex justify-between items-center pt-6 border-t">
-          <Link href="/dashboard/portfolio">
+          <Link href="/dashboard/admin/portfolio">
             <Button variant="outline" type="button">
               Cancel
             </Button>

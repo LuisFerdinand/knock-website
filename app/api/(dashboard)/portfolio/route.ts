@@ -9,7 +9,7 @@ const projectSchema = z.object({
   location: z.string().min(1, 'Location is required'),
   year: z.string().min(1, 'Year is required'),
   area: z.string().min(1, 'Area is required'),
-  completion: z.string().min(1, 'Completion date is required'),
+  completion: z.enum(['completed', 'in progress']),
   description: z.string().min(1, 'Description is required'),
   tags: z.array(z.string()).min(1, 'At least one tag is required'),
   client: z.string().optional().nullable(),
@@ -21,16 +21,28 @@ const projectSchema = z.object({
   order: z.number().default(0),
   beforeImage: z.string().optional().nullable(),
   beforeImagePublicId: z.string().optional().nullable(),
-  afterImage: z.string().min(1, 'After image is required'),
+  afterImage: z.string().optional().nullable(),
   afterImagePublicId: z.string().optional().nullable(),
   galleryImages: z.array(z.string()).default([]),
   galleryImagePublicIds: z.array(z.string()).default([]),
 });
 
 // GET all projects
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const projects = await PortfolioManager.getAllProjects();
+    const { searchParams } = new URL(request.url);
+    const completion = searchParams.get('completion');
+    
+    let projects;
+    
+    if (completion === 'in progress') {
+      projects = await PortfolioManager.getInProgressProjects();
+    } else if (completion === 'completed') {
+      projects = await PortfolioManager.getCompletedProjects();
+    } else {
+      projects = await PortfolioManager.getAllProjects();
+    }
+    
     return NextResponse.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);

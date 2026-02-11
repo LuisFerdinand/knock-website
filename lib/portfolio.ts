@@ -149,4 +149,29 @@ export class PortfolioManager {
       .where(eq(projects.featured, true))
       .orderBy(asc(projects.order), desc(projects.createdAt));
   }
+
+  /**
+   * Get projects by completion status (e.g., "completed", "in progress")
+   */
+  static async getProjectsByCompletion(completion: string) {
+    return await db
+      .select()
+      .from(projects)
+      .where(eq(projects.completion, completion))
+      .orderBy(asc(projects.order), desc(projects.createdAt));
+  }
+
+  /**
+   * Get projects that are in progress
+   */
+  static async getInProgressProjects() {
+    return await this.getProjectsByCompletion('in progress');
+  }
+
+  /**
+   * Get completed projects
+   */
+  static async getCompletedProjects() {
+    return await this.getProjectsByCompletion('completed');
+  }
 }

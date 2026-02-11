@@ -5,10 +5,18 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trash2, Edit, Plus, Image as ImageIcon, GripVertical } from 'lucide-react';
+import { Trash2, Edit, Plus, Image as ImageIcon, GripVertical, Grid3x3, List, ArrowUp, ArrowDown, MoveUp, MoveDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Project {
   id: number;
@@ -35,12 +43,15 @@ interface Project {
   team?: string;
 }
 
+type ViewMode = 'grid' | 'table';
+
 export default function PortfolioPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [draggedProject, setDraggedProject] = useState<Project | null>(null);
   const [dragOverProject, setDragOverProject] = useState<Project | null>(null);
   const [isReordering, setIsReordering] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   useEffect(() => {
     fetchProjects();
@@ -125,6 +136,56 @@ export default function PortfolioPage() {
     await saveProjectOrder(reorderedProjects);
   };
 
+  const moveProject = async (projectId: number, direction: 'up' | 'down') => {
+    const currentIndex = projects.findIndex(p => p.id === projectId);
+    
+    if (
+      (direction === 'up' && currentIndex === 0) ||
+      (direction === 'down' && currentIndex === projects.length - 1)
+    ) {
+      return; // Can't move further
+    }
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    const newProjects = [...projects];
+    const [movedProject] = newProjects.splice(currentIndex, 1);
+    newProjects.splice(newIndex, 0, movedProject);
+    
+    // Update order values based on new positions
+    const reorderedProjects = newProjects.map((project, index) => ({
+      ...project,
+      order: index
+    }));
+    
+    setProjects(reorderedProjects);
+    
+    // Save the new order to the database
+    await saveProjectOrder(reorderedProjects);
+  };
+
+  const moveToPosition = async (projectId: number, newPosition: number) => {
+    const currentIndex = projects.findIndex(p => p.id === projectId);
+    
+    if (currentIndex === newPosition || newPosition < 0 || newPosition >= projects.length) {
+      return;
+    }
+
+    const newProjects = [...projects];
+    const [movedProject] = newProjects.splice(currentIndex, 1);
+    newProjects.splice(newPosition, 0, movedProject);
+    
+    // Update order values based on new positions
+    const reorderedProjects = newProjects.map((project, index) => ({
+      ...project,
+      order: index
+    }));
+    
+    setProjects(reorderedProjects);
+    
+    // Save the new order to the database
+    await saveProjectOrder(reorderedProjects);
+  };
+
   const saveProjectOrder = async (reorderedProjects: Project[]) => {
     setIsReordering(true);
     
@@ -174,12 +235,34 @@ export default function PortfolioPage() {
           <h1 className="text-3xl font-bold">Portfolio Management</h1>
           <p className="text-muted-foreground mt-1">Manage your architectural projects</p>
         </div>
-        <Link href="/dashboard/portfolio/create">
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Project
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <div className="flex border rounded-md">
+            <Button
+              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('grid')}
+              className="rounded-r-none"
+            >
+              <Grid3x3 className="w-4 h-4 mr-2" />
+              Grid
+            </Button>
+            <Button
+              variant={viewMode === 'table' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('table')}
+              className="rounded-l-none"
+            >
+              <List className="w-4 h-4 mr-2" />
+              Table
+            </Button>
+          </div>
+          <Link href="/dashboard/admin/portfolio/create">
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Project
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {isReordering && (
@@ -189,7 +272,6 @@ export default function PortfolioPage() {
         </div>
       )}
 
-      {/* Projects Grid */}
       {projects.length === 0 ? (
         <div className="text-center py-12">
           <ImageIcon className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
@@ -202,13 +284,14 @@ export default function PortfolioPage() {
             </Button>
           </Link>
         </div>
-      ) : (
+      ) : viewMode === 'grid' ? (
+        /* Grid View */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <Card 
               key={project.id} 
               className={`overflow-hidden hover:shadow-lg transition-shadow ${
-                dragOverProject?.id === project.id ? 'ring-2 ring-primary' : ''
+                dragOverProject?.id === project.id ? 'ring-2 ring-secondary' : ''
               }`}
               draggable
               onDragStart={(e) => handleDragStart(e, project)}
@@ -269,7 +352,7 @@ export default function PortfolioPage() {
                   </div>
                 </div>
                 <div className="flex justify-end mt-4 space-x-2">
-                  <Link href={`/dashboard/portfolio/edit/${project.id}`}>
+                  <Link href={`/dashboard/admin/portfolio/edit/${project.id}`}>
                     <Button size="sm" variant="outline">
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
@@ -277,7 +360,7 @@ export default function PortfolioPage() {
                   </Link>
                   <Button
                     size="sm"
-                    variant="default"
+                    variant="destructive"
                     onClick={() => handleDelete(project.id, project.title)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -286,6 +369,141 @@ export default function PortfolioPage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      ) : (
+        /* Table View */
+        <div className="border rounded-lg overflow-hidden bg-background shadow-sm">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[80px]">Order</TableHead>
+                <TableHead className="w-[100px]">Image</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Year</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-center">Featured</TableHead>
+                <TableHead className="text-right w-[280px]">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {projects.map((project, index) => (
+                <TableRow 
+                  key={project.id}
+                  className={`${
+                    dragOverProject?.id === project.id ? 'bg-secondary/50' : ''
+                  }`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, project)}
+                  onDragOver={(e) => handleDragOver(e, project)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, project)}
+                >
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <GripVertical className="w-4 h-4 text-gray-400 cursor-move" />
+                      <div className="flex flex-col gap-1">
+                        <span className="font-mono text-sm font-medium">#{index + 1}</span>
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0"
+                            onClick={() => moveProject(project.id, 'up')}
+                            disabled={index === 0}
+                          >
+                            <ArrowUp className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0"
+                            onClick={() => moveProject(project.id, 'down')}
+                            disabled={index === projects.length - 1}
+                          >
+                            <ArrowDown className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="relative w-16 h-16 rounded overflow-hidden">
+                      <Image
+                        src={project.afterImage}
+                        alt={project.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-medium max-w-[200px]">
+                    <div className="truncate">{project.title}</div>
+                  </TableCell>
+                  <TableCell>{project.category}</TableCell>
+                  <TableCell>{project.location}</TableCell>
+                  <TableCell>{project.year}</TableCell>
+                  <TableCell>
+                    <Badge variant={
+                      project.status === 'published' ? 'default' : 
+                      project.status === 'draft' ? 'secondary' : 
+                      'outline'
+                    }>
+                      {project.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {project.featured && (
+                      <Badge variant="secondary" className="bg-yellow-500 text-white">
+                        ★
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8"
+                          onClick={() => moveToPosition(project.id, 0)}
+                          disabled={index === 0}
+                          title="Move to top"
+                        >
+                          <MoveUp className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8"
+                          onClick={() => moveToPosition(project.id, projects.length - 1)}
+                          disabled={index === projects.length - 1}
+                          title="Move to bottom"
+                        >
+                          <MoveDown className="w-3 h-3" />
+                        </Button>
+                      </div>
+                      <Link href={`/dashboard/admin/portfolio/edit/${project.id}`}>
+                        <Button size="sm" variant="outline" className="h-8">
+                          <Edit className="w-3 h-3 mr-1" />
+                          Edit
+                        </Button>
+                      </Link>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="h-8"
+                        onClick={() => handleDelete(project.id, project.title)}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>

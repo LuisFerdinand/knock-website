@@ -20,7 +20,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   // Add relations to other tables if needed
 }));
 
-// Your existing projects table
+// Your existing projects table - UPDATED
 export const projects = pgTable('projects', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
@@ -28,11 +28,11 @@ export const projects = pgTable('projects', {
   location: varchar('location', { length: 255 }).notNull(),
   year: varchar('year', { length: 10 }).notNull(),
   area: varchar('area', { length: 50 }).notNull(),
-  completion: varchar('completion', { length: 10 }).notNull(),
+  completion: varchar('completion', { length: 20 }).notNull(), // Increased length to accommodate "in progress"
   description: text('description').notNull(),
   beforeImage: varchar('before_image', { length: 500 }),
   beforeImagePublicId: varchar('before_image_public_id', { length: 500 }),
-  afterImage: varchar('after_image', { length: 500 }).notNull(),
+  afterImage: varchar('after_image', { length: 500 }),
   afterImagePublicId: varchar('after_image_public_id', { length: 500 }),
   galleryImages: jsonb('gallery_images').$type<string[]>().default([]),
   galleryImagePublicIds: jsonb('gallery_image_public_ids').$type<string[]>().default([]),
