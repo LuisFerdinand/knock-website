@@ -122,6 +122,26 @@ export const teamMembers = pgTable('team_members', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const siteSettings = pgTable('site_settings', {
+  id: serial('id').primaryKey(),
+  key: varchar('key', { length: 100 }).notNull().unique(), // 'metadata' or 'favicon'
+  siteName: varchar('site_name', { length: 255 }),
+  siteTitle: varchar('site_title', { length: 255 }),
+  siteDescription: text('site_description'),
+  favicon: varchar('favicon', { length: 500 }),
+  faviconPublicId: varchar('favicon_public_id', { length: 500 }),
+  appleTouchIcon: varchar('apple_touch_icon', { length: 500 }),
+  appleTouchIconPublicId: varchar('apple_touch_icon_public_id', { length: 500 }),
+  ogImage: varchar('og_image', { length: 500 }),
+  ogImagePublicId: varchar('og_image_public_id', { length: 500 }),
+  keywords: jsonb('keywords').$type<string[]>().default([]),
+  author: varchar('author', { length: 255 }),
+  themeColor: varchar('theme_color', { length: 50 }).default('#9C7E5A'),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // Export types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -137,3 +157,5 @@ export type AboutValue = typeof aboutValues.$inferSelect;
 export type NewAboutValue = typeof aboutValues.$inferInsert;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type NewTeamMember = typeof teamMembers.$inferInsert;
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type NewSiteSetting = typeof siteSettings.$inferInsert;

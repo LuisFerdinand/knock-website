@@ -1,8 +1,8 @@
 // app/(dashboard)/dashboard/admin/about/values/[id]/edit/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,10 +22,13 @@ interface AboutValue {
   isActive: boolean;
 }
 
-export default function EditAboutValuePage() {
+export default function EditAboutValuePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
-  const params = useParams();
-  const id = params.id as string;
+  const { id } = use(params);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,8 +49,7 @@ export default function EditAboutValuePage() {
       const response = await fetch(`/api/admin/about/values/${id}`);
       
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to fetch value: ${errorText}`);
+        throw new Error("Failed to fetch value");
       }
 
       const data = await response.json();
@@ -74,7 +76,10 @@ export default function EditAboutValuePage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: name === "order" ? parseInt(value) || 0 : value 
+    }));
   };
 
   const handleSwitchChange = (checked: boolean) => {
@@ -83,6 +88,21 @@ export default function EditAboutValuePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (!formData.icon.trim()) {
+      toast.error("Icon is required");
+      return;
+    }
+    if (!formData.title.trim()) {
+      toast.error("Title is required");
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error("Description is required");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -92,19 +112,15 @@ export default function EditAboutValuePage() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to update value: ${errorText}`);
-      }
-
       const data = await response.json();
 
-      if (!data.success) {
+      if (!response.ok || !data.success) {
         throw new Error(data.error || "Failed to update value");
       }
 
       toast.success("Value updated successfully");
       router.push("/dashboard/admin/about");
+      router.refresh();
     } catch (error) {
       console.error("Update error:", error);
       toast.error(error instanceof Error ? error.message : "Failed to update value");
@@ -143,14 +159,16 @@ export default function EditAboutValuePage() {
         <CardHeader>
           <CardTitle>Value Details</CardTitle>
           <CardDescription>
-            Edit the details for the value
+            Edit the details for the value. Icon should be a valid Lucide icon name.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="icon">Icon Name</Label>
+                <Label htmlFor="icon">
+                  Icon Name <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="icon"
                   name="icon"
@@ -159,9 +177,14 @@ export default function EditAboutValuePage() {
                   placeholder="e.g., Heart, Shield, Zap"
                   required
                 />
+                <p className="text-xs text-muted-foreground">
+                  Use a valid Lucide React icon name
+                </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">
+                  Title <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="title"
                   name="title"
@@ -172,8 +195,11 @@ export default function EditAboutValuePage() {
                 />
               </div>
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">
+                Description <span className="text-destructive">*</span>
+              </Label>
               <Textarea
                 id="description"
                 name="description"
@@ -184,9 +210,10 @@ export default function EditAboutValuePage() {
                 required
               />
             </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="order">Order</Label>
+                <Label htmlFor="order">Display Order</Label>
                 <Input
                   id="order"
                   name="order"
@@ -194,27 +221,34 @@ export default function EditAboutValuePage() {
                   value={formData.order}
                   onChange={handleChange}
                   min="0"
+                  placeholder="0"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Lower numbers appear first
+                </p>
               </div>
-              <div className="flex items-center space-x-2 pt-6">
+              <div className="flex items-center space-x-2 pt-8">
                 <Switch
                   id="isActive"
                   checked={formData.isActive}
                   onCheckedChange={handleSwitchChange}
                 />
-                <Label htmlFor="isActive">Active</Label>
+                <Label htmlFor="isActive" className="cursor-pointer">
+                  Active Status
+                </Label>
               </div>
             </div>
-            <div className="flex justify-end gap-2 pt-4">
+            
+            <div className="flex justify-end gap-3 pt-4 border-t">
               <Link href="/dashboard/admin/about">
-                <Button variant="outline" disabled={isSubmitting}>
+                <Button variant="outline" type="button" disabled={isSubmitting}>
                   Cancel
                 </Button>
               </Link>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="min-w-[120px]">
                 {isSubmitting ? (
                   <>
-                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Updating...
                   </>
                 ) : (
