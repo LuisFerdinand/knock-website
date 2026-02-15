@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import Image from "next/image";
+import { HomeImageUpload } from "./HomeImageUpload";
 
 interface AboutSection {
   id?: number;
@@ -46,8 +46,6 @@ export function HomeAboutSectionDialog({ open, onOpenChange, section, onSuccess 
     isActive: true,
   });
   const [isSaving, setIsSaving] = useState(false);
-  const [isUploadingMain, setIsUploadingMain] = useState(false);
-  const [isUploadingSecondary, setIsUploadingSecondary] = useState(false);
 
   useEffect(() => {
     if (section) {
@@ -68,79 +66,20 @@ export function HomeAboutSectionDialog({ open, onOpenChange, section, onSuccess 
     }
   }, [section, open]);
 
-  const handleImageUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "main" | "secondary"
-  ) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const setUploading = type === "main" ? setIsUploadingMain : setIsUploadingSecondary;
-    setUploading(true);
-
-    const formDataUpload = new FormData();
-    formDataUpload.append("file", file);
-    formDataUpload.append("folder", `home/about-${type}`);
-
-    try {
-      const response = await fetch("/api/upload-home", {
-        method: "POST",
-        body: formDataUpload,
-      });
-
-      if (!response.ok) throw new Error("Upload failed");
-
-      const data = await response.json();
-      
-      if (type === "main") {
-        setFormData(prev => ({
-          ...prev,
-          mainImage: data.url,
-          mainImagePublicId: data.publicId,
-        }));
-      } else {
-        setFormData(prev => ({
-          ...prev,
-          secondaryImage: data.url,
-          secondaryImagePublicId: data.publicId,
-        }));
-      }
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error("Failed to upload image");
-    } finally {
-      setUploading(false);
-    }
+  const handleMainImageUpload = (url: string, publicId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      mainImage: url,
+      mainImagePublicId: publicId,
+    }));
   };
 
-  const handleRemoveImage = async (type: "main" | "secondary") => {
-    const publicId = type === "main" ? formData.mainImagePublicId : formData.secondaryImagePublicId;
-    if (!publicId) return;
-
-    try {
-      await fetch("/api/upload-home", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ publicId }),
-      });
-
-      if (type === "main") {
-        setFormData(prev => ({
-          ...prev,
-          mainImage: "",
-          mainImagePublicId: null,
-        }));
-      } else {
-        setFormData(prev => ({
-          ...prev,
-          secondaryImage: "",
-          secondaryImagePublicId: null,
-        }));
-      }
-      toast.success("Image removed");
-    } catch (error) {
-      toast.error("Failed to remove image");
-    }
+  const handleSecondaryImageUpload = (url: string, publicId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      secondaryImage: url,
+      secondaryImagePublicId: publicId,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -234,77 +173,33 @@ export function HomeAboutSectionDialog({ open, onOpenChange, section, onSuccess 
             {/* Main Image */}
             <div className="space-y-2">
               <Label>Main Image *</Label>
-              {formData.mainImage ? (
-                <div className="space-y-2">
-                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                    <Image src={formData.mainImage} alt="Main" fill className="object-cover" />
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveImage("main")}
-                    className="w-full"
-                  >
-                    <X className="h-4 w-4 mr-2" />
-                    Remove
-                  </Button>
-                </div>
-              ) : (
-                <div className="border-2 border-dashed rounded-lg p-4">
-                  <Label htmlFor="main-image" className="cursor-pointer block text-center">
-                    <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <span className="text-sm text-primary mt-2 block">Upload Main Image</span>
-                    <Input
-                      id="main-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, "main")}
-                      disabled={isUploadingMain}
-                      className="hidden"
-                    />
-                  </Label>
-                  {isUploadingMain && <Loader2 className="h-6 w-6 animate-spin mx-auto mt-2" />}
-                </div>
-              )}
+              <HomeImageUpload
+                onImageUpload={handleMainImageUpload}
+                currentImage={formData.mainImage}
+                currentPublicId={formData.mainImagePublicId}
+                label="Upload Main Image"
+                folder="home/about-main"
+                aspectRatio="portrait"
+              />
+              <p className="text-xs text-muted-foreground">
+                Large main image (3:4 aspect ratio)
+              </p>
             </div>
 
             {/* Secondary Image */}
             <div className="space-y-2">
               <Label>Secondary Image *</Label>
-              {formData.secondaryImage ? (
-                <div className="space-y-2">
-                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                    <Image src={formData.secondaryImage} alt="Secondary" fill className="object-cover" />
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRemoveImage("secondary")}
-                    className="w-full"
-                  >
-                    <X className="h-4 w-4 mr-2" />
-                    Remove
-                  </Button>
-                </div>
-              ) : (
-                <div className="border-2 border-dashed rounded-lg p-4">
-                  <Label htmlFor="secondary-image" className="cursor-pointer block text-center">
-                    <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <span className="text-sm text-primary mt-2 block">Upload Secondary Image</span>
-                    <Input
-                      id="secondary-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, "secondary")}
-                      disabled={isUploadingSecondary}
-                      className="hidden"
-                    />
-                  </Label>
-                  {isUploadingSecondary && <Loader2 className="h-6 w-6 animate-spin mx-auto mt-2" />}
-                </div>
-              )}
+              <HomeImageUpload
+                onImageUpload={handleSecondaryImageUpload}
+                currentImage={formData.secondaryImage}
+                currentPublicId={formData.secondaryImagePublicId}
+                label="Upload Secondary Image"
+                folder="home/about-secondary"
+                aspectRatio="square"
+              />
+              <p className="text-xs text-muted-foreground">
+                Smaller overlay image (1:1 square)
+              </p>
             </div>
           </div>
 
