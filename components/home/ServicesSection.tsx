@@ -1,48 +1,81 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// /components/home/ServicesSection.tsx
+// components/home/ServicesSection.tsx
 "use client";
 
 import { Home, Hammer } from "lucide-react";
 import Link from "next/link";
-
-// Dummy data in Bahasa Indonesia
-const services = [
-  {
-    id: 1,
-    title: "Pembangunan",
-    description: "Layanan pembangunan rumah dari awal dengan desain modern dan material berkualitas tinggi. Kami memastikan setiap detail sesuai dengan visi dan kebutuhan Anda.",
-    icon: "Home"
-  },
-  {
-    id: 2,
-    title: "Renovasi",
-    description: "Transformasi dan pembaruan rumah existing Anda menjadi lebih modern dan functional. Dari renovasi kecil hingga perombakan total, kami siap membantu.",
-    icon: "Hammer"
-  }
-];
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 // Map icon names to Lucide React components
 const iconMap: Record<string, any> = {
   Home,
-  Hammer
+  Hammer,
 };
 
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+interface ServicesData {
+  section: {
+    heading: string;
+    description: string;
+    ctaText: string;
+    ctaLink: string;
+  };
+  services: Service[];
+}
+
 export default function ServicesSection() {
+  const [servicesData, setServicesData] = useState<ServicesData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchServicesData();
+  }, []);
+
+  const fetchServicesData = async () => {
+    try {
+      const response = await fetch("/api/home/services");
+      if (!response.ok) throw new Error("Failed to fetch services data");
+      const result = await response.json();
+      setServicesData(result.data);
+    } catch (error) {
+      console.error("Error fetching services data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="section-padding bg-background transition-colors duration-300 min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </section>
+    );
+  }
+
+  if (!servicesData || !servicesData.section) {
+    return null;
+  }
+
   return (
     <section className="section-padding bg-background transition-colors duration-300 min-h-screen flex items-center">
       <div className="container-custom pt-20">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="mb-4 text-secondary">Our Service</h2>
+          <h2 className="mb-4 text-secondary">{servicesData.section.heading}</h2>
           <p className="text-lg text-muted-foreground">
-            Solusi renovasi dan pembangunan rumah yang komprehensif dan disesuaikan dengan kebutuhan Anda
+            {servicesData.section.description}
           </p>
         </div>
 
         {/* Services Grid */}
         <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-          {services.map((service) => {
-            // Get the icon component from the iconMap, fallback to Home if not found
+          {servicesData.services.map((service) => {
             const IconComponent = iconMap[service.icon] || Home;
             
             return (
@@ -72,10 +105,10 @@ export default function ServicesSection() {
         {/* CTA Button */}
         <div className="my-10 text-center">
           <Link 
-            href="/services"
+            href={servicesData.section.ctaLink}
             className="inline-flex items-center justify-center px-8 py-3 rounded-md border-2 border-border bg-background text-foreground font-medium transition-all duration-300 hover:bg-ring hover:text-white hover:border-ring"
           >
-            Lihat Semua Layanan
+            {servicesData.section.ctaText}
           </Link>
         </div>
       </div>

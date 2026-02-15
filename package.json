@@ -16,7 +16,8 @@
     "db:seed-users": "tsx scripts/seed-users.ts",
     "seed:services": "tsx scripts/seed-services.ts",
     "seed:about": "tsx scripts/seed-about.ts",
-    "seed:settings": "tsx scripts/seed-site-settings.ts"
+    "seed:settings": "tsx scripts/seed-site-settings.ts",
+    "seed:home": "tsx scripts/seed-home-page.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",

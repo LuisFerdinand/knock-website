@@ -1,4 +1,4 @@
-// lib/db/schema.ts - Updated with image fields in contactSubmissions
+// lib/db/schema.ts - Updated with home page sections
 import { pgTable, text, integer, timestamp, varchar, jsonb, serial, boolean } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -144,6 +144,73 @@ export const siteSettings = pgTable('site_settings', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// ============================================
+// HOME PAGE TABLES
+// ============================================
+
+// Home page hero section
+export const homeHero = pgTable('home_hero', {
+  id: serial('id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  backgroundImage: varchar('background_image', { length: 500 }).notNull(),
+  backgroundImagePublicId: varchar('background_image_public_id', { length: 500 }),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Home page services section header
+export const homeServicesSection = pgTable('home_services_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  ctaText: varchar('cta_text', { length: 100 }).notNull(),
+  ctaLink: varchar('cta_link', { length: 255 }).notNull(),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Home page services items
+export const homeServices = pgTable('home_services', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  icon: varchar('icon', { length: 50 }).notNull(), // Icon name from lucide-react
+  order: integer('order').default(0),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Home page about section
+export const homeAboutSection = pgTable('home_about_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  highlightText: text('highlight_text').notNull(),
+  yearsLabel: varchar('years_label', { length: 100 }).notNull(),
+  clientsLabel: varchar('clients_label', { length: 100 }).notNull(),
+  mainImage: varchar('main_image', { length: 500 }).notNull(),
+  mainImagePublicId: varchar('main_image_public_id', { length: 500 }),
+  secondaryImage: varchar('secondary_image', { length: 500 }).notNull(),
+  secondaryImagePublicId: varchar('secondary_image_public_id', { length: 500 }),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Home page about section features
+export const homeAboutFeatures = pgTable('home_about_features', {
+  id: serial('id').primaryKey(),
+  feature: varchar('feature', { length: 255 }).notNull(),
+  order: integer('order').default(0),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // Export types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -161,3 +228,15 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type NewTeamMember = typeof teamMembers.$inferInsert;
 export type SiteSetting = typeof siteSettings.$inferSelect;
 export type NewSiteSetting = typeof siteSettings.$inferInsert;
+
+// Home page types
+export type HomeHero = typeof homeHero.$inferSelect;
+export type NewHomeHero = typeof homeHero.$inferInsert;
+export type HomeServicesSection = typeof homeServicesSection.$inferSelect;
+export type NewHomeServicesSection = typeof homeServicesSection.$inferInsert;
+export type HomeService = typeof homeServices.$inferSelect;
+export type NewHomeService = typeof homeServices.$inferInsert;
+export type HomeAboutSection = typeof homeAboutSection.$inferSelect;
+export type NewHomeAboutSection = typeof homeAboutSection.$inferInsert;
+export type HomeAboutFeature = typeof homeAboutFeatures.$inferSelect;
+export type NewHomeAboutFeature = typeof homeAboutFeatures.$inferInsert;

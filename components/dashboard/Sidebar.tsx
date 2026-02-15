@@ -66,6 +66,29 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
       icon: Info,
     },
     {
+      name: "Home Page",
+      icon: Home,
+      isCategory: true,
+    },
+    {
+      name: "Hero Section",
+      href: "/dashboard/admin/home/hero",
+      icon: ImageIcon,
+      isSubItem: true,
+    },
+    {
+      name: "Services Section",
+      href: "/dashboard/admin/home/services",
+      icon: Wrench,
+      isSubItem: true,
+    },
+    {
+      name: "About Section",
+      href: "/dashboard/admin/home/about",
+      icon: Info,
+      isSubItem: true,
+    },
+    {
       name: "Services",
       icon: Package,
       isCategory: true,

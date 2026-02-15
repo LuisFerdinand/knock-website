@@ -176,7 +176,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-secondary">Nilai-Nilai Kami</h2>
             <p className="text-xl text-muted-foreground">
-              Prinsip yang memandu setiap keputusan desain kami
+              Nilai-nilai ini menjadi landasan kami dalam bekerja, menjaga kualitas, profesionalisme, dan kepercayaan di setiap proyek.
             </p>
           </div>
 

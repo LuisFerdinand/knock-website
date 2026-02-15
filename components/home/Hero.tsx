@@ -2,69 +2,91 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+
+interface HeroData {
+  title: string;
+  description: string;
+  backgroundImage: string;
+}
 
 export default function Hero() {
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchHeroData();
+  }, []);
+
+  const fetchHeroData = async () => {
+    try {
+      const response = await fetch("/api/home/hero");
+      if (!response.ok) throw new Error("Failed to fetch hero data");
+      const result = await response.json();
+      setHeroData(result.data);
+    } catch (error) {
+      console.error("Error fetching hero data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="relative w-full h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </section>
+    );
+  }
+
+  if (!heroData) {
+    return null;
+  }
+
   return (
     <section className="relative w-full h-screen flex flex-col overflow-hidden">
       {/* 
         PARALLAX BACKGROUND IMAGE
-        'fixed bottom-0': Pins the image to the bottom of the viewport.
-        'z-0': Puts it at the very back.
-        As you scroll, this image stays still while the content slides over it.
-        Your next sections (Services, etc.) will eventually scroll up and cover this.
       */}
       <div className="fixed bottom-0 left-0 w-full h-[120vh] -z-10 grayscale-[80%] contrast-125">
         <Image
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2670&auto=format&fit=crop"
+          src={heroData.backgroundImage}
           alt="Modern architecture sketch"
           fill
           className="object-cover"
           priority
           quality={90}
         />
-        {/* Slight darkening for better text contrast if needed elsewhere */}
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
       {/* 
         TOP HALF (Colored Overlay)
-        'h-1/2': Takes up exactly 50% of the screen height.
-        'bg-background': Uses your global CSS variables.
-          - Light Mode: White
-          - Dark Mode: Dark Teal (from your globals.css)
-        'z-10': Sits on top of the image, hiding the top part of it.
       */}
       <div className="h-1/2 w-full bg-background z-10 transition-colors duration-300 relative">
-        {/* Optional Gradient to smooth the transition into the image */}
         <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-b from-background to-transparent opacity-100" />
       </div>
 
       {/* 
-        CONTENT AREA - Now positioned at top left
-        'absolute top-0 left-0': Position text absolutely over the top half.
-        'z-20': Ensures text is above the color overlay.
-        'items-start justify-start': Aligns content to the top left.
-        'text-left': Aligns text to the left.
+        CONTENT AREA
       */}
       <div className="absolute top-0 left-0 w-full h-1/2 z-20 flex flex-col items-start justify-center pt-20 pointer-events-none">
         <div className="container-custom w-full pointer-events-auto">
-          <h1 className="text-secondary mt-8 mb-0 tracking-loose text-left">
-            Home & Space<br />
-           Improvement <br />Studio
+          <h1 className="text-secondary mt-8 mb-0 tracking-loose text-left whitespace-pre-line">
+            {heroData.title}
           </h1>
 
           <p className="text-lg md:text-xl max-w-3xl mb-10 text-left tracking-tight text-muted-foreground">
-            Izinkan tim kami mengetuk pintu rumah Anda dan memulai proses transformasi perancangan ruang untuk rumah yang lebih nyaman, fungsional, dan berkarakter sesuai kebutuhan Anda.
-          </p>         
+            {heroData.description}
+          </p>
         </div>
       </div>
 
       {/* 
         BOTTOM HALF (Window to Image)
-        This div is invisible (pointer-events-none), it just marks the space where the image shows through.
       */}
       <div className="h-1/2 w-full relative z-0 pointer-events-none" />
-
     </section>
   );
 }
