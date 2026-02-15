@@ -1,5 +1,5 @@
+// components/dashboard/Sidebar.tsx - Updated with About Page navigation
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/dashboard/Sidebar.tsx - Collapsible with tooltips
 "use client";
 
 import Link from "next/link";
@@ -22,6 +22,7 @@ import {
   Info,
   KeyRound,
   Users,
+  FileText,
 } from "lucide-react";
 import {
   Tooltip,
@@ -30,7 +31,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Define proper types for navigation items
 interface NavigationItem {
   name: string;
   icon: any;
@@ -60,18 +60,14 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
       href: "/dashboard/admin/portfolio",
       icon: ImageIcon,
     },
-    {
-      name: "About",
-      href: "/dashboard/admin/about",
-      icon: Info,
-    },
+    // Home Page Category
     {
       name: "Home Page",
       icon: Home,
       isCategory: true,
     },
     {
-      name: "Hero Section",
+      name: "Hero Section Home",
       href: "/dashboard/admin/home/hero",
       icon: ImageIcon,
       isSubItem: true,
@@ -88,6 +84,43 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
       icon: Info,
       isSubItem: true,
     },
+    // About Page Category
+    {
+      name: "About Page",
+      icon: Info,
+      isCategory: true,
+    },
+    {
+      name: "Main Section",
+      href: "/dashboard/admin/about/main-section",
+      icon: FileText,
+      isSubItem: true,
+    },
+    {
+      name: "Hero Section About",
+      href: "/dashboard/admin/about/hero-section",
+      icon: ImageIcon,
+      isSubItem: true,
+    },
+    {
+      name: "Values Header",
+      href: "/dashboard/admin/about/values-header",
+      icon: Heart,
+      isSubItem: true,
+    },
+    {
+      name: "Team Header",
+      href: "/dashboard/admin/about/team-header",
+      icon: Users,
+      isSubItem: true,
+    },
+    {
+      name: "Values & Team management",
+      href: "/dashboard/admin/about",
+      icon: Wrench,
+      isSubItem: true,
+    },
+    // Services Category
     {
       name: "Services",
       icon: Package,
@@ -159,7 +192,7 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
 
   const NavigationLink = ({ item }: { item: NavigationItem }) => {
     const Icon = item.icon;
-    const isActive = pathname === item.href;
+    const isActive = pathname === item.href || (item.href?.includes('#') && pathname === item.href.split('#')[0]);
 
     const linkContent = (
       <Link
@@ -172,12 +205,10 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
             : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
         }`}
       >
-        {/* Active indicator */}
         {isActive && (
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-secondary/50" />
         )}
         
-        {/* Hover background effect */}
         <div className={`absolute inset-0 bg-gradient-to-r from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isActive ? 'opacity-100' : ''}`} />
         
         <Icon className={`h-5 w-5 transition-all duration-200 relative z-10 flex-shrink-0 ${
@@ -187,7 +218,6 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
       </Link>
     );
 
-    // Wrap in tooltip if collapsed
     if (isCollapsed) {
       return (
         <Tooltip delayDuration={0}>
@@ -206,7 +236,7 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
 
   const SubNavigationLink = ({ item }: { item: NavigationItem }) => {
     const Icon = item.icon;
-    const isActive = pathname === item.href;
+    const isActive = pathname === item.href || (item.href?.includes('#') && pathname === item.href.split('#')[0]);
 
     const linkContent = (
       <Link
@@ -219,12 +249,10 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
             : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
         }`}
       >
-        {/* Active indicator */}
         {isActive && (
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-secondary/50 rounded-r-full" />
         )}
         
-        {/* Hover background effect */}
         <div className={`absolute inset-0 bg-gradient-to-r from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isActive ? 'opacity-100' : ''}`} />
         
         <Icon className={`h-4 w-4 transition-all duration-200 relative z-10 flex-shrink-0 ${
@@ -234,7 +262,6 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
       </Link>
     );
 
-    // Wrap in tooltip if collapsed
     if (isCollapsed) {
       return (
         <Tooltip delayDuration={0}>
@@ -353,11 +380,9 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
           <div className="space-y-1 px-3">
-            {navigation.map((item, index) => {
-              // Category header (non-clickable)
+            {navigation.map((item) => {
               if (item.isCategory) {
                 if (isCollapsed) {
-                  // Show a simple divider when collapsed
                   return (
                     <div key={item.name} className="my-2">
                       <div className="h-px bg-border/50" />
@@ -381,12 +406,10 @@ export function Sidebar({ userRole, isCollapsed }: SidebarProps) {
                 );
               }
 
-              // Sub-items (indented)
               if (item.isSubItem) {
                 return <SubNavigationLink key={item.name} item={item} />;
               }
 
-              // Regular items
               return <NavigationLink key={item.name} item={item} />;
             })}
           </div>

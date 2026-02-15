@@ -97,6 +97,48 @@ export const serviceComparisonFeatures = pgTable('service_comparison_features', 
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// ============================================
+// ABOUT PAGE TABLES - FULL CMS
+// ============================================
+
+// About page main section (top section with large image)
+export const aboutMainSection = pgTable('about_main_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  image: varchar('image', { length: 500 }).notNull(),
+  imagePublicId: varchar('image_public_id', { length: 500 }),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// About page hero section (with CTA buttons)
+export const aboutHeroSection = pgTable('about_hero_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  subheading: text('subheading').notNull(),
+  ctaConsultText: varchar('cta_consult_text', { length: 100 }).notNull(),
+  ctaConsultLink: varchar('cta_consult_link', { length: 255 }).notNull(),
+  ctaPortfolioText: varchar('cta_portfolio_text', { length: 100 }).notNull(),
+  ctaPortfolioLink: varchar('cta_portfolio_link', { length: 255 }).notNull(),
+  image: varchar('image', { length: 500 }).notNull(),
+  imagePublicId: varchar('image_public_id', { length: 500 }),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// About page values section header
+export const aboutValuesSection = pgTable('about_values_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // About values table
 export const aboutValues = pgTable('about_values', {
   id: serial('id').primaryKey(),
@@ -104,6 +146,17 @@ export const aboutValues = pgTable('about_values', {
   title: varchar('title', { length: 255 }).notNull(),
   description: text('description').notNull(),
   order: integer('order').default(0),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// About page team section header
+export const aboutTeamSection = pgTable('about_team_section', {
+  id: serial('id').primaryKey(),
+  heading: varchar('heading', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  teamListHeading: varchar('team_list_heading', { length: 100 }).notNull(),
   isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
@@ -222,10 +275,6 @@ export type Service = typeof services.$inferSelect;
 export type NewService = typeof services.$inferInsert;
 export type ServiceComparisonFeature = typeof serviceComparisonFeatures.$inferSelect;
 export type NewServiceComparisonFeature = typeof serviceComparisonFeatures.$inferInsert;
-export type AboutValue = typeof aboutValues.$inferSelect;
-export type NewAboutValue = typeof aboutValues.$inferInsert;
-export type TeamMember = typeof teamMembers.$inferSelect;
-export type NewTeamMember = typeof teamMembers.$inferInsert;
 export type SiteSetting = typeof siteSettings.$inferSelect;
 export type NewSiteSetting = typeof siteSettings.$inferInsert;
 
@@ -240,3 +289,16 @@ export type HomeAboutSection = typeof homeAboutSection.$inferSelect;
 export type NewHomeAboutSection = typeof homeAboutSection.$inferInsert;
 export type HomeAboutFeature = typeof homeAboutFeatures.$inferSelect;
 export type NewHomeAboutFeature = typeof homeAboutFeatures.$inferInsert;
+
+export type AboutMainSection = typeof aboutMainSection.$inferSelect;
+export type NewAboutMainSection = typeof aboutMainSection.$inferInsert;
+export type AboutHeroSection = typeof aboutHeroSection.$inferSelect;
+export type NewAboutHeroSection = typeof aboutHeroSection.$inferInsert;
+export type AboutValuesSection = typeof aboutValuesSection.$inferSelect;
+export type NewAboutValuesSection = typeof aboutValuesSection.$inferInsert;
+export type AboutTeamSection = typeof aboutTeamSection.$inferSelect;
+export type NewAboutTeamSection = typeof aboutTeamSection.$inferInsert;
+export type AboutValue = typeof aboutValues.$inferSelect;
+export type NewAboutValue = typeof aboutValues.$inferInsert;
+export type TeamMember = typeof teamMembers.$inferSelect;
+export type NewTeamMember = typeof teamMembers.$inferInsert;
