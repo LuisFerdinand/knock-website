@@ -24,7 +24,7 @@ export default function CTASection() {
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link href="/portfolio">
+            <Link href="/portfolio" className="hidden sm:block">
               <Button size="lg" variant="outline" className="border-foreground text-foreground hover:bg-foreground hover:text-background">
                 Lihat Karya Kami
               </Button>
