@@ -1,4 +1,4 @@
-// lib/whatsapp.ts - Updated with improved formatting and Rupiah currency
+// lib/whatsapp.ts - Updated with iOS-compatible WhatsApp URL
 export function formatWhatsAppMessage(formData: {
   name: string;
   address: string;
@@ -96,5 +96,7 @@ export function generateWhatsAppUrl(phoneNumber: string, message: string): strin
       ? `62${cleanPhone.substring(1)}` 
       : `62${cleanPhone}`;
   
-  return `https://wa.me/${formattedPhone}?text=${message}`;
+  // Use api.whatsapp.com instead of wa.me for better iOS compatibility
+  // This format works more reliably across all devices and browsers
+  return `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${message}`;
 }

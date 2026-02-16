@@ -1,4 +1,4 @@
-// app/(site)/schedule/page.tsx - Updated with image upload
+// app/(site)/schedule/page.tsx - Updated with iOS WhatsApp fix
 "use client";
 
 import { useState } from "react";
@@ -144,7 +144,21 @@ export default function ContactPage() {
       }
       
       if (data.whatsappUrl) {
-        window.open(data.whatsappUrl, '_blank');
+        // Detect iOS and Safari
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        
+        // For iOS/Safari, use location.href to avoid popup blocking
+        // This works better with deep links and doesn't get blocked
+        if (isIOS || isSafari) {
+          // Small delay to ensure state updates complete
+          setTimeout(() => {
+            window.location.href = data.whatsappUrl;
+          }, 100);
+        } else {
+          // For other browsers, open in new tab
+          window.open(data.whatsappUrl, '_blank');
+        }
       }
       
       setIsSubmitted(true);
